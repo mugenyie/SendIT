@@ -2,7 +2,6 @@ import psycopg2
 from pprint import pprint
 from datetime import datetime
 import urllib.parse as urlparse
-import os
 
 class DatabaseConnection:
     try:
