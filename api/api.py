@@ -58,7 +58,7 @@ def cancel_specific_delivery_order(parcelId):
             'id': 0,
             'message': ''
         }]
-    }), 200
+    }), 204
 
 
 """
@@ -73,7 +73,7 @@ def create_parcel_delivery_order():
             'id': 0,
             'message': ''
         }]
-    }), 200
+    }), 201
 
 
 """
@@ -89,7 +89,7 @@ def change_destination_parcel_delivery_order(parcelId):
             'to':'',
             'message': ''
         }]
-    }), 200
+    }), 204
 
 
 """
@@ -106,7 +106,7 @@ def change_status_parcel_delivery_order(parcelId):
             'status':'',
             'message': ''
         }]
-    }), 200
+    }), 204
 
 
 """
@@ -123,4 +123,4 @@ def change_location_specific_delivery_order(parcelId):
             'currentLocation':'',
             'message': ''
         }]
-    }), 200
+    }), 204
