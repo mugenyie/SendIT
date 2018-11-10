@@ -8,15 +8,14 @@ api = Blueprint('api', 'api', url_prefix='/api/v1')
 
 @api.route('/')
 def index():
-    # try:
-    #     psycopg2.connect(
-    #             dbname="sendit_db",
-    #             user="postgres",
-    #             password="columbus",
-    #             host="localhost",
-    #             port=5432
-    #         )
-    #     print("connected to database")
-    # except:
-    #     print("can't connect to database")
     return 'SendIT Api'
+
+
+@api.route('/parcels')
+def get_parcels():
+    return 'parcel'
+
+
+@api.route('/parcels/<parcelId>')
+def get_specific_delivery_order():
+    return 'order'
