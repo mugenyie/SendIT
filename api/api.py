@@ -8,6 +8,37 @@ api = Blueprint('api', 'api', url_prefix='/api/v1')
 def index():
     return 'SendIT Api'
   
+# User Authorisation Endpoints
+"""
+POST  /auth/signup
+CREATE A USER ACCOUNT 
+"""
+@api.route('/auth/signup', methods=['POST'])
+def create_user():
+    return jsonify({
+        'status': 201,
+        'data': [{
+            'token': '',
+            'user': {} # user object
+        }]
+    }), 201
+
+
+"""
+POST  /auth/login 
+LOGIN A USER
+"""
+@api.route('/auth/login', methods=['POST'])
+def login_user():
+    return jsonify({
+        'status': 200,
+        'data': [{
+            'token': '',
+            'user': {} # user object
+        }]
+    }), 200
+
+
 # Parcel delivery Endpoints
 
 """
