@@ -217,4 +217,6 @@ class SignUpAuthApiTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 201)
 
-    
+
+if __name__ == '__main__':
+    unittest.main()
