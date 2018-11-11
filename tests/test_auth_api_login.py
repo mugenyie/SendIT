@@ -12,12 +12,14 @@ class TestApiEndPoints(unittest.TestCase):
     def setUp(self):
         self.tester = app.test_client(self)
 
+
     # User login tests
-    def test_registration_email_with_space(self):
+    def test_login_email_with_space(self):
         user = dict(
             email = ' ' ,
             password = self.default_password
         )
+
 
         response = self.tester.post(
             self.default_login_endpoint,
@@ -28,7 +30,8 @@ class TestApiEndPoints(unittest.TestCase):
         reply = json.loads(response.data.decode())
         self.assertEqual(reply["data"], "Sorry, enter your email!")
 
-    def test_registration_with_empty_email(self):
+
+    def test_login_with_empty_email(self):
         user = dict(
             email = '' ,
             password = self.default_password
@@ -43,20 +46,6 @@ class TestApiEndPoints(unittest.TestCase):
         reply = json.loads(response.data.decode())
         self.assertEqual(reply["data"], "Sorry, enter your email!")
 
-    def test_that_email_is_already_registered(self):
-        user = dict(
-            email = self.default_email,
-            password = self.default_password
-        )
-
-        response = self.tester.post(
-            self.default_login_endpoint,
-            content_type='application/json',
-            data=json.dumps(user)
-        )
-
-        reply = json.loads(response.data.decode())
-        self.assertEqual(reply["data"], "Sorry, email already registered with another user!")
 
     def test_that_email_is_valid(self):
         user = dict(
@@ -73,9 +62,10 @@ class TestApiEndPoints(unittest.TestCase):
         reply = json.loads(response.data.decode())
         self.assertEqual(reply["data"], "Sorry, email already registered with another user!")
 
+
     def test_that_password_is_not_empty(self):
             user = dict(
-                email = self.email,
+                email = self.default_email,
                 password = ''
             )
 
@@ -87,6 +77,7 @@ class TestApiEndPoints(unittest.TestCase):
 
             reply = json.loads(response.data.decode())
             self.assertEqual(reply["data"], "Sorry, password can not be empty!")
+
 
     def test_that_username_is_not_empty(self):
             user = dict(
@@ -103,6 +94,7 @@ class TestApiEndPoints(unittest.TestCase):
             reply = json.loads(response.data.decode())
             self.assertEqual(reply["data"], "Sorry, username can not be empty!")
 
+
     def test_that_username_is_not_space(self):
             user = dict(
                 username = ' ',
@@ -118,6 +110,7 @@ class TestApiEndPoints(unittest.TestCase):
             reply = json.loads(response.data.decode())
             self.assertEqual(reply["data"], "Sorry, username should not contain a space!")
 
+
     def test_that_username_has_no_invalid_characters(self):
             user = dict(
                 email = '*columbus',
@@ -132,3 +125,19 @@ class TestApiEndPoints(unittest.TestCase):
 
             reply = json.loads(response.data.decode())
             self.assertEqual(reply["data"], "Sorry, username should contain valid characters!")
+
+
+    def test_with_correct_details(self):
+            user = dict(
+                email = self.default_email,
+                password = self.default_password
+            )
+
+            response = self.tester.post(
+                self.default_login_endpoint,
+                content_type='application/json',
+                data=json.dumps(user)
+            )
+
+            reply = json.loads(response.data.decode())
+            self.assertEqual(reply["data"], "Sucessfuly logged in.")
