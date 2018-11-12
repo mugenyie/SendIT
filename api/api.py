@@ -1,6 +1,15 @@
 from flask import Blueprint, request, jsonify, session
-from database import DatabaseConnection
+from flask_bcrypt import Bcrypt
+import uuid
+from api.database import DatabaseConnection
+from api.validations.user import validate_user_details
+import utils
+import datetime
 
+
+
+database = DatabaseConnection()
+b_crypt = Bcrypt()
 api = Blueprint('api', 'api', url_prefix='/api/v1')
 
 # Landing page for api
@@ -15,14 +24,31 @@ CREATE A USER ACCOUNT 
 """
 @api.route('/auth/signup', methods=['POST'])
 def create_user():
-    return jsonify({
-        'status': 201,
-        'data': [{
-            'token': '',
-            'user': {} # user object
-        }]
-    }), 201
+    # get the post data
+    data = request.get_json(force=True)
+    errors = validate_user_details(data)
+    if len(errors) > 0:
+        return jsonify({
+            "Errors" : errors
+        }), 404
 
+    data['registered'] = datetime.datetime.now()
+    data['password'] = b_crypt.generate_password_hash(data['password']).decode('utf-8')
+
+    try:
+        user = database.create_user(data)
+        return jsonify({
+            'status': 201,
+            'data': [{
+                'token': '',
+                'user': user
+            }]
+        }), 201
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Error" : "Please try again"
+        }), 401
 
 """
 POST  /auth/login 
