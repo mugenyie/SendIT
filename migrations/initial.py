@@ -30,9 +30,10 @@ create_tables_commands = (
         lastname VARCHAR(255) NOT NULL,
         othernames VARCHAR(255),
         email VARCHAR(255) NOT NULL,
+        username VARCHAR(255) NOT NULL,
         password VARCHAR(500) NOT NULL,
         registered timestamp with time zone DEFAULT now(),
-        isAdmin boolean NOT NULL,
+        isAdmin boolean DEFAULT FALSE,
         updatedOn timestamp with time zone
     )
     """

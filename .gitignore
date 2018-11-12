@@ -1,4 +1,9 @@
-venv/
-.env
-.vscode/
+!venv/
+!.env
+!.coverage
+!.vscode
+!.travis*
+!.coveralls*
+__pycache__/
 /coverage/
+.*
