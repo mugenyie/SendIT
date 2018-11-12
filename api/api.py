@@ -1,15 +1,13 @@
 from flask import Blueprint, request, jsonify, session
-from flask_bcrypt import Bcrypt
 import uuid
 from api.database import DatabaseConnection
-from api.validations.user import validate_user_registration_details 
-import utils
+from api.validations.user import validate_user_registration_details, validate_user_login_details
+from utils import encrypt_password
 import datetime
 
 
 
 database = DatabaseConnection()
-b_crypt = Bcrypt()
 api = Blueprint('api', 'api', url_prefix='/api/v1')
 
 # Landing page for api
@@ -31,10 +29,7 @@ def create_user():
         return jsonify({
             "Errors" : errors
         }), 404
-
     data['registered'] = datetime.datetime.now()
-    data['password'] = b_crypt.generate_password_hash(data['password']).decode('utf-8')
-
     try:
         user = database.create_user(data)
         return jsonify({
@@ -50,19 +45,33 @@ def create_user():
             "Error" : "Please try again"
         }), 401
 
+
 """
 POST  /auth/login 
 LOGIN A USER
 """
 @api.route('/auth/login', methods=['POST'])
 def login_user():
-    return jsonify({
-        'status': 200,
-        'data': [{
-            'token': '',
-            'user': {} # user object
-        }]
-    }), 200
+    data = request.get_json(force=True)
+    errors = validate_user_login_details(data)
+    if len(errors) > 0:
+        return jsonify({
+            "Errors" : errors
+        }), 404
+    try:
+        user = database.fetch_user_by_username_and_password(data)
+        return jsonify({
+            'status': 200,
+            'data': [{
+                'token': '',
+                'user': user # user object
+            }]
+        }), 200
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Error" : "Please try again",
+        }), 401
 
 
 # Parcel delivery Endpoints
