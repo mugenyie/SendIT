@@ -1,7 +1,7 @@
 import unittest
 import json
 from api import app
-from random import randint
+from utils import string_generator
 from .base import BaseTestCase
 
 
@@ -201,8 +201,8 @@ class SignUpAuthApiTestCase(BaseTestCase):
 
     def test_with_unregistered_user(self):
         user = dict(
-            email = 'ec' + str(randint(0, 9)) + '@gmail.com',
-            username = str(randint(0, 9)),
+            email = string_generator(6) + '@gmail.com',
+            username = string_generator(6),
             firstname = self.default_firstname,
             lastname = self.default_lastname,
             othernames = self.default_othernames,
