@@ -2,8 +2,16 @@ language: python
 python:
   - "3.5"
 # command to install dependencies
-install:
+iservices:
+  - postgresql
+install: 
   - pip install -r requirements.txt
+  - pip install coveralls
+before_script:
+  - psql -c "CREATE DATABASE sendit_db;" -U postgres
+  - psql -c "CREATE USER columbus WITH PASSWORD 'columbus';" -U postgres
 # command to run tests
-script:
-  - pytest
+script: 
+  - pytest --cov=api
+after_success:
+  - coveralls
