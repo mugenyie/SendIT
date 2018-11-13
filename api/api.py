@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import uuid
 from api.database import DatabaseConnection
 from api.validations.user import validate_user_registration_details, validate_user_login_details
+from api.validations.parcel import validate_parcel_order
 from utils import encrypt_password
 import datetime
 
@@ -10,19 +11,18 @@ import datetime
 database = DatabaseConnection()
 api = Blueprint('api', 'api', url_prefix='/api/v1')
 
-# Landing page for api
+
 @api.route('/')
 def index():
     return 'SendIT Api'
   
-# User Authorisation Endpoints
+
 """
 POST  /auth/signup
 CREATE A USER ACCOUNT 
 """
 @api.route('/auth/signup', methods=['POST'])
 def create_user():
-    # get the post data
     data = request.get_json(force=True)
     errors = validate_user_registration_details(data)
     if len(errors) > 0:
@@ -42,7 +42,7 @@ def create_user():
     except Exception as e:
         print(e)
         return jsonify({
-            "Error" : "Please try again"
+            "Error" : str(e)
         }), 401
 
 
@@ -64,18 +64,45 @@ def login_user():
             'status': 200,
             'data': [{
                 'token': '',
-                'user': user # user object
+                'user': user 
             }]
         }), 200
     except Exception as e:
         print(e)
         return jsonify({
-            "Error" : "Please try again",
+            "Error" : str(e),
+        }), 401
+
+
+"""
+POST /parcels: 
+CREATE A PARCEL DELIVERY ORDER 
+"""
+@api.route('/parcels', methods=['POST'])
+def create_parcel_delivery_order():
+    data = request.get_json(force=True)
+    errors = validate_parcel_order(data)
+    if len(errors) > 0:
+        return jsonify({
+            "Errors" : errors
+        }), 404
+    try:
+        parcel = database.creat_parcel_delivery_order(data)
+        return jsonify({
+            'status': 201,
+            'data': [{
+                'id': parcel[0],
+                'message': 'Order created'
+            }]
+        }), 201
+    except Exception as e:
+       
+        return jsonify({
+            "Error" : str(e),
         }), 401
 
 
 # Parcel delivery Endpoints
-
 """
 GET /parcels 
 FETCH ALL PARCEL DELIVERY ORDERS 
@@ -125,21 +152,6 @@ def cancel_specific_delivery_order(parcelId):
             'message': ''
         }]
     }), 204
-
-
-"""
-POST /parcels: 
-CREATE A PARCEL DELIVERY ORDER 
-"""
-@api.route('/parcels', methods=['POST'])
-def create_parcel_delivery_order():
-    return jsonify({
-        'status': 0,
-        'data': [{
-            'id': 0,
-            'message': ''
-        }]
-    }), 201
 
 
 """

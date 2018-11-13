@@ -67,6 +67,14 @@ class DatabaseConnection:
         user = self.cursor.fetchone()
         return user
 
+    def fetch_user_by_id(self, id):
+        get_user_by_id_command = """
+        SELECT * FROM users WHERE "id"='{}'
+        """.format(id)
+        self.cursor.execute(get_user_by_id_command)
+        user = self.cursor.fetchone()
+        return user
+
     def fetch_user_by_username_and_password(self, data={}):
         get_user_command = """
         SELECT id,firstname, lastname, othernames, email, username, registered, isadmin
@@ -85,3 +93,21 @@ class DatabaseConnection:
             person['registered'] = user[6]
             person['isAdmin'] = user[7]
         return person
+
+
+    def creat_parcel_delivery_order(self, data={}):
+        get_parcel_command = """
+        INSERT INTO parcels (placedby, weight, weightmetric, senton, deliveredon, status, "from", "to", currentlocation)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        RETURNING id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
+        """
+
+        self.cursor.execute(get_parcel_command, (
+            data.get('placedby'), data.get('weight'), 
+            data.get('weightmetric'), data.get('senton'), 
+            data.get('deliveredon'), "PLACED", 
+            data.get('from'), data.get('to'), 
+            data.get('currentlocation')
+        ))
+        parcel = self.cursor.fetchone()
+        return parcel
