@@ -12,8 +12,7 @@ class DatabaseConnection:
     try:
         def __init__(self):
             load_dotenv()
-            if os.environ.get('DATABASE_URL'):
-                database_uri = os.environ.get('DATABASE_URL')
+            database_uri = os.environ.get('DATABASE_URL')
             result = urlparse(database_uri)
             self.connection = psycopg2.connect(
                 dbname=result.path[1:],

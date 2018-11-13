@@ -12,6 +12,6 @@ before_script:
   - psql -c "CREATE USER columbus WITH PASSWORD 'columbus';" -U postgres
 # command to run tests
 script: 
-  - pytest --cov
+  - pytest --cov=api
 after_success:
   - coveralls
