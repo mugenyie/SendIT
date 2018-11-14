@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import uuid
 from api.database import DatabaseConnection
 from api.validations.user import validate_user_registration_details, validate_user_login_details
-from api.validations.parcel import validate_parcel_order, validate_id, validate_userid, validate_parcel_order_id
+from api.validations.parcel import validate_parcel_order, validate_id, validate_userid, validate_parcel_order_id, validate_parcel_destination
 from utils import encrypt_password
 import datetime
 
@@ -186,16 +186,30 @@ def cancel_delivery_order(parcelId):
 PATCH  /parcels/<parcelId>/destination 
 CHANGE DESTINATION OF SPECIFIC PARCEL DELIVERY ORDER
 """
-@api.route('/parcels/<int:parcelId>/destination', methods=['PATCH'])
-def change_destination_parcel_delivery_order(parcelId):
-    return jsonify({
-        'status': 0,
-        'data': [{
-            'id': 0, #the parcel
-            'to':'',
-            'message': ''
-        }]
-    }), 204
+@api.route('/parcels/<int:parcelId>/<string:destination>', methods=['PATCH'])
+def change_destination_parcel_delivery_order(parcelId, destination):
+    errors_parcel = validate_parcel_order_id(parcelId)
+    errors = validate_parcel_destination(destination)
+    errors.update(errors_parcel)
+    if len(errors) > 0:
+        return jsonify({
+            "Errors" : errors
+        }), 404
+    try:
+        database.change_order_destination(parcelId, destination)
+        return jsonify({
+            'status': 200,
+            'data': [{
+                'id': parcelId, #the parcel
+                'to': destination,
+                'message': 'Parcel destination updated'
+            }]
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "Error" : str(e),
+        }), 401
+
 
 
 """

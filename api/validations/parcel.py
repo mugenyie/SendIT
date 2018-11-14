@@ -48,4 +48,10 @@ def validate_parcel_order_id(id):
         errors['Id'] = 'Invalid parcel order'
     return errors
 
+def validate_parcel_destination(destination):
+    errors = {}
+    if not destination:
+        errors['destination'] = 'Order destination can not be null'
+    return errors
+
             
