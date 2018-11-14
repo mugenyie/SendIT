@@ -1,4 +1,4 @@
-from utils import validate_float, validate_datetime
+from utils import validate_float, validate_datetime, validate_integer
 from api.database import DatabaseConnection
 
 
@@ -27,5 +27,14 @@ def validate_parcel_order(data):
     if not database.fetch_user_by_id(data.get('placedby')):
         errors['userid'] = 'user id does not exist'
     return errors
+
+def validate_id(id):
+    errors = {}
+    if not id:
+        errors['Id'] = 'Id field is required'
+    if not validate_integer(id):
+        errors['Id'] = 'Invalid interger format'
+    return errors
+
 
             
