@@ -1,6 +1,5 @@
 import unittest
 import json
-from api import app
 from random import randint
 from utils import string_generator
 from .base import BaseTestCase
