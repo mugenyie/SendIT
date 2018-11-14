@@ -14,6 +14,9 @@ def validate_alphanumeric(str):
 def validate_float(float_):
     return re.match(r'[-+]?([0-9]*\.[0-9]+|[0-9]+)',float_)
 
+def validate_integer(interger):
+    return re.match(r'^[0-9]*$',interger)
+
 def validate_datetime(date_time):
     return datetime.datetime.strptime(date_time, '%m/%j/%y %H:%M')
 

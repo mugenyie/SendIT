@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import uuid
 from api.database import DatabaseConnection
 from api.validations.user import validate_user_registration_details, validate_user_login_details
-from api.validations.parcel import validate_parcel_order
+from api.validations.parcel import validate_parcel_order, validate_id
 from utils import encrypt_password
 import datetime
 
@@ -117,18 +117,22 @@ def get_all_parcels():
             "Error" : str(e),
         }), 401
 
-
 """
 GET /parcels/<parcelId> 
 FETCH A SPECIFIC DELIVERY ORDER 
 """
 @api.route('/parcels/<int:parcelId>', methods=['GET'])
 def get_specific_delivery_order(parcelId):
-    return jsonify({
-        'status': 0,
-        'data': [{}]
-    }), 200
-
+    try:
+        parcel = database.get_specific_parcel_order(parcelId)
+        return jsonify({
+            'status': 200,
+            'data': parcel
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "Error" : str(e),
+        }), 401
 
 """
 GET /users/<userId>/parcels 

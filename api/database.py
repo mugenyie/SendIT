@@ -27,6 +27,8 @@ class DatabaseConnection:
     except:
         pprint("Failed To Connect to Database")
 
+
+#  CRUD Methods
     def create_user(self, data={}):
         insert_user_command = """
         INSERT INTO users (firstname, lastname, othernames, email, username, registered, password) 
@@ -93,7 +95,7 @@ class DatabaseConnection:
             person['isAdmin'] = user[7]
         return person
 
-
+#Parcel CRUD operations
     def creat_parcel_delivery_order(self, data={}):
         get_parcel_command = """
         INSERT INTO parcels (placedby, weight, weightmetric, senton, deliveredon, status, "from", "to", currentlocation)
@@ -115,6 +117,16 @@ class DatabaseConnection:
         SELECT id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
         from parcels 
         """
+        self.cursor.execute(get_parcel_orders_command)
+        columns = [col[0] for col in self.cursor.description]
+        parcels = [dict(zip(columns, parcel)) for parcel in self.cursor.fetchall()]        
+        return parcels
+
+    def get_specific_parcel_order(self, parcelId):
+        get_parcel_orders_command = """
+        SELECT id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
+        from parcels WHERE id = {}
+        """.format(parcelId)
         self.cursor.execute(get_parcel_orders_command)
         columns = [col[0] for col in self.cursor.description]
         parcels = [dict(zip(columns, parcel)) for parcel in self.cursor.fetchall()]        
