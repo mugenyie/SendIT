@@ -1,10 +1,9 @@
-!venv/
-!.env
-!.coverage
-!.vscode
-!.travis*
-!.coveralls*
+venv/
+.env
+.coverage
+.vscode
+.travis.yml
+.coveralls.yml
 __pycache__/
 api/__pycache__/
-/coverage/
-.*
+.pytest_cache/
