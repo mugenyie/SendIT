@@ -131,25 +131,18 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    # def test_fetch_orders_with_wrong_user(self):
+    def test_fetch_orders_with_wrong_user(self):
 
-    #     response = self.client.get('api/v1/users/90/parcels')
+        response = self.client.get('api/v1/users/0/parcels')
 
-    #     self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
     
-    # def test_can_cancel_delivery_order(self):
+    def test_cancel_unavailable_delivery_order(self):
 
-    #     response = self.client.patch('api/v1/parcels/2/cancel')
+        response = self.client.patch('api/v1/parcels/0/cancel')
 
-    #     self.assertEqual(response.status_code, 204)
-
-
-    # def test_can_cancel_unavailable_order(self):
-
-    #     response = self.client.patch('api/v1/parcels/100/cancel')
-
-    #     self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
 
     # def test_can_change_destination_of_delivery_order(self):

@@ -42,4 +42,10 @@ def validate_userid(id):
         errors['Id'] = 'User does not exist'
     return errors
 
+def validate_parcel_order_id(id):
+    errors = {}
+    if not database.get_specific_parcel_order_id(id):
+        errors['Id'] = 'Invalid parcel order'
+    return errors
+
             
