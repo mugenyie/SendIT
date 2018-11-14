@@ -9,7 +9,7 @@ install:
   - pip install coveralls
 before_script:
   - psql -c "CREATE DATABASE sendit_db;" -U postgres
-  - psql -c "CREATE USER postgres WITH PASSWORD 'columbus';" -U postgres
+  - psql -c "CREATE USER admin WITH PASSWORD 'columbus';" -U postgres
 # command to run tests
 script: 
   - py.test --cov=api -v
