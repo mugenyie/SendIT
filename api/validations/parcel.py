@@ -36,5 +36,10 @@ def validate_id(id):
         errors['Id'] = 'Invalid interger format'
     return errors
 
+def validate_userid(id):
+    errors = {}
+    if not database.fetch_user_by_id(id):
+        errors['Id'] = 'User does not exist'
+    return errors
 
             

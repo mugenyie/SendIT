@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import uuid
 from api.database import DatabaseConnection
 from api.validations.user import validate_user_registration_details, validate_user_login_details
-from api.validations.parcel import validate_parcel_order, validate_id
+from api.validations.parcel import validate_parcel_order, validate_id, validate_userid
 from utils import encrypt_password
 import datetime
 
@@ -140,11 +140,21 @@ FETCH ALL PARCEL DELIVERY ORDERS BY A SPECIFIC USER
 """
 @api.route('/users/<int:userId>/parcels', methods=['GET'])
 def get_user_delivery_orders(userId):
-    return jsonify({
-        'status': 0,
-        'data': [{},{}]
-    }), 200
-
+    errors = validate_userid(userId)
+    if len(errors) > 0:
+        return jsonify({
+            "Errors" : errors
+        }), 404
+    try:
+        parcel = database.get_parcel_orders_by_user(userId)
+        return jsonify({
+            'status': 200,
+            'data': parcel
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "Error" : str(e),
+        }), 401
 
 """
 PATCH  /parcels/<parcelId>/cancel 

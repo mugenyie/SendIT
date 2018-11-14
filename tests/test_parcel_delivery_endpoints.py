@@ -124,18 +124,11 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    # def test_with_unavailable_delivery_order(self):
+    def test_fetch_orders_by_wrong_user(self):
 
-    #     response = self.client.get('api/v1/parcels/1')
+        response = self.client.get('api/v1/users/0/parcels')
 
-    #     self.assertEqual(response.status_code, 404)
-
-
-    # def test_fetch_orders_by_user(self):
-
-    #     response = self.client.get('api/v1/users/1/parcels')
-
-    #     self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
 
 
     # def test_fetch_orders_with_wrong_user(self):
