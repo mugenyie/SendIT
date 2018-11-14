@@ -110,11 +110,11 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
     #     self.assertEqual(response.status_code, 404)
 
 
-    # def test_that_get_all_parcels(self):
+    def test_that_get_all_parcels(self):
 
-    #     response = self.client.get('api/v1/parcels')
+        response = self.client.get('api/v1/parcels')
 
-    #     self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
 
     # def test_that_can_fetch_specific_delivery_order(self):
