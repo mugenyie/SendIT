@@ -145,11 +145,11 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    # def test_can_change_destination_of_delivery_order(self):
+    def test_change_destination_with_invalid_order(self):
 
-    #     response = self.client.patch('api/v1/parcels/2/destination')
+        response = self.client.patch('api/v1/parcels/0/destination')
 
-    #     self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
 
     # def test_can_change_status_of_delivery_order(self):
