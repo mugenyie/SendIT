@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import uuid
 from api.database import DatabaseConnection
 from api.validations.user import validate_user_registration_details, validate_user_login_details
-from api.validations.parcel import validate_parcel_order, validate_id, validate_userid
+from api.validations.parcel import validate_parcel_order, validate_id, validate_userid, validate_parcel_order_id
 from utils import encrypt_password
 import datetime
 
@@ -161,14 +161,25 @@ PATCH  /parcels/<parcelId>/cancel
 CANCEL A SPECIFIC DELIVERY ORDER 
 """
 @api.route('/parcels/<int:parcelId>/cancel', methods=['PATCH'])
-def cancel_specific_delivery_order(parcelId):
-    return jsonify({
-        'status': 0,
-        'data': [{
-            'id': 0,
-            'message': ''
-        }]
-    }), 204
+def cancel_delivery_order(parcelId):
+    errors = validate_parcel_order_id(parcelId)
+    if len(errors) > 0:
+        return jsonify({
+            "Errors" : errors
+        }), 404
+    try:
+        database.cancel_delivery_order(parcelId)
+        return jsonify({
+            'status': 200,
+            'data': [{
+                'id': parcelId,
+                'message': 'Order canceled'
+            }]
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "Error" : str(e),
+        }), 401
 
 
 """
