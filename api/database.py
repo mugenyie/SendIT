@@ -100,7 +100,6 @@ class DatabaseConnection:
         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
         RETURNING id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
         """
-
         self.cursor.execute(get_parcel_command, (
             data.get('placedby'), data.get('weight'), 
             data.get('weightmetric'), data.get('senton'), 
@@ -110,3 +109,13 @@ class DatabaseConnection:
         ))
         parcel = self.cursor.fetchone()
         return parcel
+
+    def get_all_parcel_order(self):
+        get_parcel_orders_command = """
+        SELECT id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
+        from parcels 
+        """
+        self.cursor.execute(get_parcel_orders_command)
+        columns = [col[0] for col in self.cursor.description]
+        parcels = [dict(zip(columns, parcel)) for parcel in self.cursor.fetchall()]        
+        return parcels

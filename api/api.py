@@ -45,7 +45,6 @@ def create_user():
             "Error" : str(e)
         }), 401
 
-
 """
 POST  /auth/login 
 LOGIN A USER
@@ -74,6 +73,7 @@ def login_user():
         }), 401
 
 
+# Parcel delivery Endpoints
 """
 POST /parcels: 
 CREATE A PARCEL DELIVERY ORDER 
@@ -96,23 +96,26 @@ def create_parcel_delivery_order():
             }]
         }), 201
     except Exception as e:
-       
         return jsonify({
             "Error" : str(e),
         }), 401
 
-
-# Parcel delivery Endpoints
 """
 GET /parcels 
 FETCH ALL PARCEL DELIVERY ORDERS 
 """
 @api.route('/parcels', methods=['GET'])
 def get_all_parcels():
-    return jsonify({
-        'status': 0,
-        'data': [{},{}]
-    }), 200
+    try:
+        parcels = database.get_all_parcel_order()
+        return jsonify({
+            'status': 200,
+            'data': parcels
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "Error" : str(e),
+        }), 401
 
 
 """
