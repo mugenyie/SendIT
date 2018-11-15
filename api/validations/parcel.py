@@ -53,5 +53,11 @@ def validate_parcel_destination(destination):
     if not destination:
         errors['destination'] = 'Order destination can not be null'
     return errors
+    
+def validate_parcel_status(status):
+    errors = {}
+    if not status:
+        errors['Status'] = 'Order status can not be null'
+    return errors
 
             

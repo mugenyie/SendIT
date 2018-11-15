@@ -139,37 +139,41 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
 
     
     def test_cancel_unavailable_delivery_order(self):
-
         response = self.client.patch('api/v1/parcels/0/cancel')
-
         self.assertEqual(response.status_code, 404)
 
 
     def test_change_destination_with_invalid_order(self):
-
         response = self.client.patch('api/v1/parcels/0/destination')
-
         self.assertEqual(response.status_code, 400)
 
     def test_change_destination_with_empty_destination(self):
         destination = dict(
                 to="",
             )
-
         response = self.client.patch(
             'api/v1/parcels/0/destination',
             content_type='application/json',
             data=json.dumps(destination)
         )
-
         self.assertEqual(response.status_code, 400)
 
 
-    # def test_can_change_status_of_delivery_order(self):
+    def test_change_order_status_with_empty(self):
+        response = self.client.patch('api/v1/parcels/4/status')
+        self.assertEqual(response.status_code, 400)
 
-    #     response = self.client.patch('api/v1/parcels/2/status')
+    def test_change_order_status_with_invalid_order(self):
+        status = dict(
+                status="PLACED",
+            )
+        response = self.client.patch(
+            'api/v1/parcels/0/status',
+            content_type='application/json',
+            data=json.dumps(status)
+        )
+        self.assertEqual(response.status_code, 400)
 
-    #     self.assertEqual(response.status_code, 204)
 
 
     # def test_can_change_order_current_location(self):

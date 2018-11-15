@@ -163,3 +163,11 @@ class DatabaseConnection:
         """.format(destination, parcelId)
         self.cursor.execute(change_destination_commnd)   
         return 
+
+    def change_order_status(self, parcelId, status):
+        change_status_commnd = """
+        UPDATE parcels SET "status" = '{}' WHERE id = {}
+        """.format(status, parcelId)
+        self.cursor.execute(change_status_commnd)   
+        return 
+
