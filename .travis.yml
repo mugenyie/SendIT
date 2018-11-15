@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.7.0"
+  - "3.6.7"
 # command to install dependencies
 services:
   - postgresql
@@ -11,6 +11,4 @@ before_script:
   - psql -c "CREATE USER admin WITH PASSWORD 'columbus';" -U postgres
 # command to run tests
 script: 
-  - pytest --cov=api -v
-after_success:
-  - coveralls
+  - pytest --cov=tests 
