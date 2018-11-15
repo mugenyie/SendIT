@@ -181,4 +181,3 @@ class DatabaseConnection:
         """.format(status, parcelId)
         self.cursor.execute(change_status_commnd)   
         return 
-
