@@ -149,7 +149,20 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
 
         response = self.client.patch('api/v1/parcels/0/destination')
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
+
+    def test_change_destination_with_empty_destination(self):
+        destination = dict(
+                to="",
+            )
+
+        response = self.client.patch(
+            'api/v1/parcels/0/destination',
+            content_type='application/json',
+            data=json.dumps(destination)
+        )
+
+        self.assertEqual(response.status_code, 400)
 
 
     # def test_can_change_status_of_delivery_order(self):

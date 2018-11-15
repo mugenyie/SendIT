@@ -186,22 +186,23 @@ def cancel_delivery_order(parcelId):
 PATCH  /parcels/<parcelId>/destination 
 CHANGE DESTINATION OF SPECIFIC PARCEL DELIVERY ORDER
 """
-@api.route('/parcels/<int:parcelId>/<string:destination>', methods=['PATCH'])
-def change_destination_parcel_delivery_order(parcelId, destination):
+@api.route('/parcels/<int:parcelId>/destination', methods=['PATCH'])
+def change_destination_parcel_delivery_order(parcelId):
+    data = request.get_json(force=True)
     errors_parcel = validate_parcel_order_id(parcelId)
-    errors = validate_parcel_destination(destination)
+    errors = validate_parcel_destination(data.get('to'))
     errors.update(errors_parcel)
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors
-        }), 404
+        }), 400
     try:
-        database.change_order_destination(parcelId, destination)
+        database.change_order_destination(parcelId, data.get('to'))
         return jsonify({
             'status': 200,
             'data': [{
                 'id': parcelId, #the parcel
-                'to': destination,
+                'to': data.get('to'),
                 'message': 'Parcel destination updated'
             }]
         }), 200
@@ -211,14 +212,13 @@ def change_destination_parcel_delivery_order(parcelId, destination):
         }), 401
 
 
-
 """
 PATCH  /parcels/<parcelId>/status 
 Change the status of a specific parcel delivery order
 Only Admin
 """
 @api.route('/parcels/<int:parcelId>/status', methods=['PATCH'])
-def change_status_parcel_delivery_order(parcelId):
+def change_status_parcel_delivery_order(parcelId, status):
     return jsonify({
         'status': 0,
         'data': [{
