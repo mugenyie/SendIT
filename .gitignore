@@ -2,7 +2,6 @@ venv/
 .env
 .coverage
 .vscode
-.travis.yml
 .coveralls.yml
 __pycache__/
 api/__pycache__/
