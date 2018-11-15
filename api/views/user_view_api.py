@@ -1,7 +1,7 @@
 from api.views import base_view
 from flask import request, jsonify, Blueprint
 import datetime
-from api.validations.user import validate_user_registration_details, validate_user_login_details, validate_if_isadmin, validate_userid
+from api.validations.user import validate_user_registration_details, validate_null_user_data , validate_user_login_details, validate_if_isadmin, validate_userid
   
   
 database = base_view.database
@@ -14,7 +14,9 @@ CREATE A USER ACCOUNT 
 @user_api.route('/auth/signup', methods=['POST'])
 def create_user():
     data = request.get_json(force=True)
+    null_errors = validate_null_user_data(data)
     errors = validate_user_registration_details(data)
+    errors.update(null_errors)
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors
@@ -49,6 +51,11 @@ def login_user():
         }), 404
     try:
         user = database.fetch_user_by_username_and_password(data)
+        if not user:
+            error_null_user = 'User does not exist'
+            return jsonify({
+                "Errors" : error_null_user
+            }), 404
         return jsonify({
             'status': 200,
             'data': [{

@@ -13,9 +13,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
                 weight="4",
                 weightmetric="Kg",
                 senton= "2018-11-13 02:05:13.344624+03",
-                deliveredon= "2018-11-13 02:05:13.344624+03",
-                to="ntinda",
-                currentlocation="ntinda"
+                to="ntinda"
             )
         order['from'] ="Nitnda"
         response = self.client.post(
@@ -31,9 +29,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
                 weight="4",
                 weightmetric="Kg",
                 senton= "2018-11-13 02:05:13.344624+03",
-                deliveredon= "2018-11-13 02:05:13.344624+03",
-                to="",
-                currentlocation="ntinda"
+                to=""
             )
         order['from'] ="Nitnda"
         response = self.client.post(
@@ -49,9 +45,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
                 weight="4",
                 weightmetric="Kg",
                 senton= "2018-11-13 02:05:13.344624+03",
-                deliveredon= "2018-11-13 02:05:13.344624+03",
-                to="ntinda",
-                currentlocation="ntinda"
+                to="ntinda"
             )
         order['from'] =""
         response = self.client.post(
@@ -67,9 +61,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
             weight="jkl",
             weightmetric="Kg",
             senton= "2018-11-13 02:05:13.344624+03",
-            deliveredon= "2018-11-13 02:05:13.344624+03",
             to="ntinda",
-            currentlocation="ntinda"
         )
         order['from'] ="Nitnda"
         response = self.client.post(
@@ -85,9 +77,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
                 weight="4",
                 weightmetric="Kg",
                 senton= "",
-                deliveredon= "2018-11-13 02:05:13.344624+03",
                 to="ntinda",
-                currentlocation="ntinda"
             )
         order['from'] ="Nitnda"
         response = self.client.post(
@@ -96,18 +86,6 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
             data=json.dumps(order)
         )
         self.assertEqual(response.status_code, 404)
-
-
-    # def test_send_unexpected_order_data(self):
-    #     order = dict(
-    #         randomStuff = dict(data = 'random')
-    #     )
-    #     response = self.client.post(
-    #         'api/v1/parcels',
-    #         content_type='application/json',
-    #         data=json.dumps(order)
-    #     )
-    #     self.assertEqual(response.status_code, 404)
 
 
     def test_that_get_all_parcels(self):

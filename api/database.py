@@ -109,16 +109,15 @@ class DatabaseConnection:
 #Parcel CRUD operations
     def creat_parcel_delivery_order(self, data={}):
         get_parcel_command = """
-        INSERT INTO parcels (placedby, weight, weightmetric, senton, deliveredon, status, "from", "to", currentlocation)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        RETURNING id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
+        INSERT INTO parcels (placedby, weight, weightmetric, senton, status, "from", "to")
+        VALUES (%s,%s,%s,%s,%s,%s,%s)
+        RETURNING id, placedby, weight, weightmetric, senton, status, "from", "to"
         """
         self.cursor.execute(get_parcel_command, (
             data.get('placedby'), data.get('weight'), 
             data.get('weightmetric'), data.get('senton'), 
-            data.get('deliveredon'), "PLACED", 
-            data.get('from'), data.get('to'), 
-            data.get('currentlocation')
+            "PLACED", 
+            data.get('from'), data.get('to')
         ))
         parcel = self.cursor.fetchone()
         return parcel

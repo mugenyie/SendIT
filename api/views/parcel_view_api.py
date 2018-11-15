@@ -1,7 +1,7 @@
 from api.views import base_view
 from flask import request, jsonify, Blueprint
 import datetime
-from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status, validate_parcel_location
+from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status, validate_parcel_location, validate_null_parcel_data
 from api.validations.user import validate_userid, validate_if_isadmin
 
 
@@ -16,7 +16,9 @@ CREATE A PARCEL DELIVERY ORDER
 @parcel_api.route('/parcels', methods=['POST'])
 def create_parcel_delivery_order():
     data = request.get_json(force=True)
+    error_null_data = validate_null_parcel_data(data)
     errors = validate_parcel_order(data)
+    errors.update(error_null_data)
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors

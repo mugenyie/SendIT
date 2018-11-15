@@ -6,26 +6,25 @@ database = DatabaseConnection()
 
 def validate_parcel_order(data):
     errors = {}
-    # if not check_valid_parcel_data(data):
-    #     errors['data'] = 'Unexpected order data'
-    if not data.get('weight'):
-        errors['no_weight'] = 'Weight can not be null'
     if not validate_float(data.get('weight')):
         errors['invalidweight'] = 'Invalid weight'
-    if not data.get('weightmetric'):
-        errors['weightmetric'] = 'Weight metric cannot be null'
-    if not data.get('senton'):
-        errors['validsenttime'] = 'Sent time can not be null'
-    if not data.get('deliveredon'):
-        errors['validdeliveredtime'] = 'Delivered time can not be null'
-    if not data.get('from'):
-        errors['from'] = 'Source can not be null'
+    if not data.get('placedby'):
+        errors['user'] = 'User id can not be null'
+    else:
+        if not database.fetch_user_by_id(data.get('placedby')):
+            errors['userid'] = 'User id does not exist'
+    return errors
+
+def validate_null_parcel_data(data):
+    errors = {}
+    if not data.get('weight'):
+        errors['no_weight'] = 'Weight can not be null'
     if not data.get('to'):
         errors['to'] = 'Destination field can not be null'
-    if not data.get('currentlocation'):
-        errors['currentlocation'] = 'Current location field can not be null'
-    if not database.fetch_user_by_id(data.get('placedby')):
-        errors['userid'] = 'user id does not exist'
+    if not data.get('from'):
+        errors['from'] = 'Source can not be null'
+    if not data.get('weightmetric'):
+        errors['weightmetric'] = 'Weight metric cannot be null'
     return errors
 
 def validate_id(id):
