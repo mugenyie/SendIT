@@ -5,6 +5,7 @@ python:
 services:
   - postgresql
 install: 
+  - pip install pytest-cov
   - pip install -r requirements.txt
 before_script:
   - psql -c "CREATE DATABASE sendit_db;" -U postgres
