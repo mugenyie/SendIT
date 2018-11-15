@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 import uuid
 from api.database import DatabaseConnection
-from api.validations.user import validate_user_registration_details, validate_user_login_details
-from api.validations.parcel import validate_parcel_order, validate_id, validate_userid, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status
+from api.validations.user import validate_user_registration_details, validate_user_login_details, validate_if_isadmin, validate_userid
+from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status, validate_parcel_location
 from utils import encrypt_password
 import datetime
 
@@ -221,12 +221,19 @@ Only Admin
 def change_status_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
     errors_parcel = validate_parcel_order_id(parcelId)
+    errors_user = validate_if_isadmin(data.get('userid'))
     errors = validate_parcel_status(data.get('status'))
     errors.update(errors_parcel)
+    errors.update(errors_user)
     if len(errors) > 0:
-        return jsonify({
+        if errors_user:
+            return jsonify({
+            "Errors" : errors_user
+            }), 401
+        else:
+            return jsonify({
             "Errors" : errors
-        }), 400
+            }), 400
     try:
         database.change_order_status(parcelId, data.get('status'))
         return jsonify({
@@ -249,12 +256,33 @@ Change the present location of a specific parcel delivery order.
 Only Admin
 """
 @api.route('/parcels/<int:parcelId>/currentlocation', methods=['PATCH'])
-def change_location_specific_delivery_order(parcelId):
-    return jsonify({
-        'status': 0,
-        'data': [{
-            'id': 0, #the parcel
-            'currentLocation':'',
-            'message': ''
-        }]
-    }), 204
+def change_present_location_of_order(parcelId):
+    data = request.get_json(force=True)
+    errors = validate_parcel_order_id(parcelId)
+    errors_user = validate_if_isadmin(data.get('userid'))
+    errors_location = validate_parcel_location(data.get('currentlocation'))
+    errors.update(errors_user)
+    errors.update(errors_location)
+    if len(errors) > 0:
+        if errors_user:
+            return jsonify({
+            "Errors" : errors_user
+            }), 401
+        else:
+            return jsonify({
+            "Errors" : errors
+            }), 400
+    try:
+        database.change_order_status(parcelId, data.get('currentlocation'))
+        return jsonify({
+            'status': 200,
+            'data': [{
+                'id': parcelId, #the parcel
+                'currentLocation': data.get('currentlocation'),
+                'message': 'Parcel location updated'
+            }]
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "Error" : str(e),
+        }), 401

@@ -38,4 +38,20 @@ def validate_user_login_details(data):
         if not user:
             errors['user'] = 'User does not exist'
     return errors
+
+def validate_if_isadmin(userid):
+    errors = {}
+    if not userid:
+        errors['user'] = 'User id can not be null'
+    else:
+        if not database.check_if_isadmin(userid):
+            errors['userId'] = 'Only admin is allowed to access the resource'
+    return errors
+
+def validate_userid(id):
+    errors = {}
+    if not database.fetch_user_by_id(id):
+        errors['id'] = 'User does not exist'
+    return errors
+
     

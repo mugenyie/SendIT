@@ -36,12 +36,6 @@ def validate_id(id):
         errors['Id'] = 'Invalid interger format'
     return errors
 
-def validate_userid(id):
-    errors = {}
-    if not database.fetch_user_by_id(id):
-        errors['Id'] = 'User does not exist'
-    return errors
-
 def validate_parcel_order_id(id):
     errors = {}
     if not database.get_specific_parcel_order_id(id):
@@ -58,6 +52,12 @@ def validate_parcel_status(status):
     errors = {}
     if not status:
         errors['Status'] = 'Order status can not be null'
+    return errors
+    
+def validate_parcel_location(currentlocation):
+    errors = {}
+    if not currentlocation:
+        errors['currentlocation'] = 'Current location can not be null'
     return errors
 
             
