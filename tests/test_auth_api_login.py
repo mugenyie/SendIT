@@ -1,5 +1,6 @@
 import unittest
 import json
+from api import app
 from random import randint
 from utils import string_generator
 from .base import BaseTestCase
@@ -82,8 +83,4 @@ class LoginAuthApiTestCase(BaseTestCase):
         )
 
         self.assertEqual(response.status_code, 404)
-
-if __name__ == '__main__':
-    unittest.main()
-
     
