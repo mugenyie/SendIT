@@ -1,84 +1,19 @@
-from flask import Blueprint, request, jsonify, session
-import uuid
-from api.database import DatabaseConnection
-from api.validations.user import validate_user_registration_details, validate_user_login_details, validate_if_isadmin, validate_userid
-from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status, validate_parcel_location
-from utils import encrypt_password
+from api.views import base_view
+from flask import request, jsonify, Blueprint
 import datetime
+from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status, validate_parcel_location
+from api.validations.user import validate_userid, validate_if_isadmin
 
 
-
-database = DatabaseConnection()
-api = Blueprint('api', 'api', url_prefix='/api/v1')
-
-
-@api.route('/')
-def index():
-    return 'SendIT Api'
-  
-
-"""
-POST  /auth/signup
-CREATE A USER ACCOUNT 
-"""
-@api.route('/auth/signup', methods=['POST'])
-def create_user():
-    data = request.get_json(force=True)
-    errors = validate_user_registration_details(data)
-    if len(errors) > 0:
-        return jsonify({
-            "Errors" : errors
-        }), 404
-    data['registered'] = datetime.datetime.now()
-    try:
-        user = database.create_user(data)
-        return jsonify({
-            'status': 201,
-            'data': [{
-                'token': '',
-                'user': user
-            }]
-        }), 201
-    except Exception as e:
-        print(e)
-        return jsonify({
-            "Error" : str(e)
-        }), 401
-
-"""
-POST  /auth/login 
-LOGIN A USER
-"""
-@api.route('/auth/login', methods=['POST'])
-def login_user():
-    data = request.get_json(force=True)
-    errors = validate_user_login_details(data)
-    if len(errors) > 0:
-        return jsonify({
-            "Errors" : errors
-        }), 404
-    try:
-        user = database.fetch_user_by_username_and_password(data)
-        return jsonify({
-            'status': 200,
-            'data': [{
-                'token': '',
-                'user': user 
-            }]
-        }), 200
-    except Exception as e:
-        print(e)
-        return jsonify({
-            "Error" : str(e),
-        }), 401
-
+database = base_view.database
+parcel_api = Blueprint('parcel_api', 'parcel_view_api', url_prefix='/api/v1')
 
 # Parcel delivery Endpoints
 """
 POST /parcels: 
 CREATE A PARCEL DELIVERY ORDER 
 """
-@api.route('/parcels', methods=['POST'])
+@parcel_api.route('/parcels', methods=['POST'])
 def create_parcel_delivery_order():
     data = request.get_json(force=True)
     errors = validate_parcel_order(data)
@@ -104,7 +39,7 @@ def create_parcel_delivery_order():
 GET /parcels 
 FETCH ALL PARCEL DELIVERY ORDERS 
 """
-@api.route('/parcels', methods=['GET'])
+@parcel_api.route('/parcels', methods=['GET'])
 def get_all_parcels():
     try:
         parcels = database.get_all_parcel_order()
@@ -121,7 +56,7 @@ def get_all_parcels():
 GET /parcels/<parcelId> 
 FETCH A SPECIFIC DELIVERY ORDER 
 """
-@api.route('/parcels/<int:parcelId>', methods=['GET'])
+@parcel_api.route('/parcels/<int:parcelId>', methods=['GET'])
 def get_specific_delivery_order(parcelId):
     try:
         parcel = database.get_specific_parcel_order(parcelId)
@@ -138,7 +73,7 @@ def get_specific_delivery_order(parcelId):
 GET /users/<userId>/parcels 
 FETCH ALL PARCEL DELIVERY ORDERS BY A SPECIFIC USER
 """
-@api.route('/users/<int:userId>/parcels', methods=['GET'])
+@parcel_api.route('/users/<int:userId>/parcels', methods=['GET'])
 def get_user_delivery_orders(userId):
     errors = validate_userid(userId)
     if len(errors) > 0:
@@ -160,7 +95,7 @@ def get_user_delivery_orders(userId):
 PATCH  /parcels/<parcelId>/cancel 
 CANCEL A SPECIFIC DELIVERY ORDER 
 """
-@api.route('/parcels/<int:parcelId>/cancel', methods=['PATCH'])
+@parcel_api.route('/parcels/<int:parcelId>/cancel', methods=['PATCH'])
 def cancel_delivery_order(parcelId):
     errors = validate_parcel_order_id(parcelId)
     if len(errors) > 0:
@@ -186,7 +121,7 @@ def cancel_delivery_order(parcelId):
 PATCH  /parcels/<parcelId>/destination 
 CHANGE DESTINATION OF SPECIFIC PARCEL DELIVERY ORDER
 """
-@api.route('/parcels/<int:parcelId>/destination', methods=['PATCH'])
+@parcel_api.route('/parcels/<int:parcelId>/destination', methods=['PATCH'])
 def change_destination_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
     errors_parcel = validate_parcel_order_id(parcelId)
@@ -217,7 +152,7 @@ PATCH  /parcels/<parcelId>/status
 Change the status of a specific parcel delivery order
 Only Admin
 """
-@api.route('/parcels/<int:parcelId>/status', methods=['PATCH'])
+@parcel_api.route('/parcels/<int:parcelId>/status', methods=['PATCH'])
 def change_status_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
     errors_parcel = validate_parcel_order_id(parcelId)
@@ -255,7 +190,7 @@ PATCH  /parcels/<parcelId>/currentlocation
 Change the present location of a specific parcel delivery order.
 Only Admin
 """
-@api.route('/parcels/<int:parcelId>/currentlocation', methods=['PATCH'])
+@parcel_api.route('/parcels/<int:parcelId>/currentlocation', methods=['PATCH'])
 def change_present_location_of_order(parcelId):
     data = request.get_json(force=True)
     errors = validate_parcel_order_id(parcelId)
