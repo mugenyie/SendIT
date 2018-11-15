@@ -75,6 +75,17 @@ class DatabaseConnection:
         self.cursor.execute(get_user_by_id_command)
         user = self.cursor.fetchone()
         return user
+    
+    def check_if_isadmin(self, id):
+        get_user_by_id_command = """
+        SELECT isadmin FROM users WHERE id = {}
+        """.format(id)
+        self.cursor.execute(get_user_by_id_command)
+        user = self.cursor.fetchone()
+        if user[0] == True:
+            return True
+        else:
+            return False
 
     def fetch_user_by_username_and_password(self, data={}):
         get_user_command = """

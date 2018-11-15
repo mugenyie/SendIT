@@ -111,30 +111,22 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
 
 
     def test_that_get_all_parcels(self):
-
         response = self.client.get('api/v1/parcels')
-
         self.assertEqual(response.status_code, 200)
 
 
     def test_fetch_specific_delivery_order_invalid_id(self):
-
         response = self.client.get('api/v1/parcels/p')
-
         self.assertEqual(response.status_code, 404)
 
 
     def test_fetch_orders_by_wrong_user(self):
-
         response = self.client.get('api/v1/users/0/parcels')
-
         self.assertEqual(response.status_code, 404)
 
 
     def test_fetch_orders_with_wrong_user(self):
-
         response = self.client.get('api/v1/users/0/parcels')
-
         self.assertEqual(response.status_code, 404)
 
     
@@ -163,21 +155,28 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         response = self.client.patch('api/v1/parcels/4/status')
         self.assertEqual(response.status_code, 400)
 
-    def test_change_order_status_with_invalid_order(self):
+    def test_change_order_status_with_user_notadmin(self):
         status = dict(
-                status="PLACED",
-            )
+            userid="100",
+            status="PLACED"
+        )
         response = self.client.patch(
-            'api/v1/parcels/0/status',
+            'api/v1/parcels/87/status',
             content_type='application/json',
             data=json.dumps(status)
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 401)
 
 
 
-    # def test_can_change_order_current_location(self):
-
-    #     response = self.client.patch('/parcels/2/currentlocation')
-
-    #     self.assertEqual(response.status_code, 204)
+    def test_change_order_current_location_notadmin(self):
+        status = dict(
+            userid="100",
+            status="PLACED"
+        )
+        response = self.client.patch(
+            'api/v1/parcels/87/currentlocation',
+            content_type='application/json',
+            data=json.dumps(status)
+        )
+        self.assertEqual(response.status_code, 401)
