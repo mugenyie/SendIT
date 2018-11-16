@@ -131,21 +131,20 @@ class DatabaseConnection:
 
     def get_specific_parcel_order(self, parcelId):
         get_parcel_orders_command = """
-        SELECT id, placedby, weight, weightmetric, senton, deliveredon,status, "from", "to", currentlocation
-        from parcels WHERE id = {}
+        SELECT * from parcels WHERE id = {}
         """.format(parcelId)
         self.cursor.execute(get_parcel_orders_command)
         columns = [col[0] for col in self.cursor.description]
         parcels = [dict(zip(columns, parcel)) for parcel in self.cursor.fetchall()]        
         return parcels
 
-    def get_specific_parcel_order_id(self, parcelId):
-        get_parcel_orders_command = """
-        SELECT * from parcels WHERE id = {}
-        """.format(parcelId)
-        self.cursor.execute(get_parcel_orders_command)
-        parcel = self.cursor.fetchone()
-        return parcel
+    # def get_specific_parcel_order_id(self, parcelId):
+    #     get_parcel_orders_command = """
+    #     SELECT * from parcels WHERE id = {}
+    #     """.format(parcelId)
+    #     self.cursor.execute(get_parcel_orders_command)
+    #     parcel = self.cursor.fetchone()
+    #     return parcel
 
     def get_parcel_orders_by_user(self, userId):
         get_parcel_orders_command = """

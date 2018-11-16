@@ -37,7 +37,7 @@ def validate_id(id):
 
 def validate_parcel_order_id(id):
     errors = {}
-    if not database.get_specific_parcel_order_id(id):
+    if not database.get_specific_parcel_order(id):
         errors['parcelId'] = 'Invalid parcel order'
     return errors
 
@@ -51,7 +51,7 @@ def validate_change_order_status(parcelId, status):
     errors = {}
     if not status:
         errors['Status'] = 'Order status can not be null'
-    if not database.get_specific_parcel_order_id(parcelId):
+    if not database.get_specific_parcel_order(parcelId):
         errors['parcelId'] = 'Invalid parcel order'
     return errors
     
