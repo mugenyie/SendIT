@@ -122,25 +122,6 @@ class SignUpAuthApiTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    
-    def test_that_username_is_not_taken(self):
-        user = dict(
-            email = self.default_email,
-            username = self.default_username,
-            firstname = self.default_firstname,
-            lastname = self.default_lastname,
-            othernames = self.default_othernames,
-            password = self.default_password
-        )
-
-        response = self.client.post(
-            self.default_signup_endpoint,
-            content_type='application/json',
-            data=json.dumps(user)
-        )
-
-        self.assertEqual(response.status_code, 404)
-
 
     def test_that_firstname_is_not_empty(self):
         user = dict(
@@ -199,7 +180,7 @@ class SignUpAuthApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    def test_with_unregistered_user(self):
+    def test_with_new_user(self):
         user = dict(
             email = string_generator(6) + '@gmail.com',
             username = string_generator(6),
