@@ -6,7 +6,9 @@ services:
   - postgresql
 cache: pip
 install: 
+  - pip install pytest
   - pip install pytest-cov
+  - pip install coveralls
   - pip install -r requirements.txt
 before_script:
   - psql -c "CREATE DATABASE sendit_db;" -U postgres
@@ -14,3 +16,5 @@ before_script:
 # command to run tests
 script: 
   - pytest --cov=tests 
+after_success:
+  - coveralls
