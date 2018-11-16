@@ -66,7 +66,7 @@ class SignUpAuthApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    def test_that_email_is_not_registered_already(self):
+    def test_with_unregistered_user(self):
         user = dict(
             email = self.default_email,
             username = self.default_username,
@@ -82,7 +82,7 @@ class SignUpAuthApiTestCase(BaseTestCase):
             data=json.dumps(user)
         )
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 201)
 
 
     def test_that_username_has_no_invalid_characters(self):
