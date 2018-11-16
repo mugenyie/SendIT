@@ -45,7 +45,7 @@ def validate_if_isadmin(userid):
         errors['user'] = 'User id can not be null'
     else:
         if not database.check_if_isadmin(userid):
-            errors['userId'] = 'Only admin is allowed to access the resource'
+            errors['user'] = 'Only admin is allowed to access the resource'
     return errors
 
 def validate_userid(id_):

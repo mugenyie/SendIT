@@ -38,7 +38,7 @@ def validate_id(id):
 def validate_parcel_order_id(id):
     errors = {}
     if not database.get_specific_parcel_order_id(id):
-        errors['Id'] = 'Invalid parcel order'
+        errors['parcelId'] = 'Invalid parcel order'
     return errors
 
 def validate_parcel_destination(destination):
@@ -47,10 +47,12 @@ def validate_parcel_destination(destination):
         errors['destination'] = 'Order destination can not be null'
     return errors
     
-def validate_parcel_status(status):
+def validate_change_order_status(parcelId, status):
     errors = {}
     if not status:
         errors['Status'] = 'Order status can not be null'
+    if not database.get_specific_parcel_order_id(parcelId):
+        errors['parcelId'] = 'Invalid parcel order'
     return errors
     
 def validate_parcel_location(currentlocation):

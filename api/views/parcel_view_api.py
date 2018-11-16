@@ -1,7 +1,7 @@
 from api.views import base_view
 from flask import request, jsonify, Blueprint
 import datetime
-from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_parcel_status, validate_parcel_location, validate_null_parcel_data
+from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_change_order_status, validate_parcel_location, validate_null_parcel_data
 from api.validations.user import validate_userid, validate_if_isadmin
 
 
@@ -157,20 +157,16 @@ Only Admin
 @parcel_api.route('/parcels/<int:parcelId>/status', methods=['PATCH'])
 def change_status_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
-    errors_parcel = validate_parcel_order_id(parcelId)
     errors_user = validate_if_isadmin(data.get('userid'))
-    errors = validate_parcel_status(data.get('status'))
-    errors.update(errors_parcel)
-    errors.update(errors_user)
+    if errors_user:
+        return jsonify({
+        "Errors" : errors_user
+        }), 401
+    errors = validate_change_order_status(parcelId, data.get('status'))
     if len(errors) > 0:
-        if errors_user:
-            return jsonify({
-            "Errors" : errors_user
-            }), 401
-        else:
-            return jsonify({
-            "Errors" : errors
-            }), 400
+        return jsonify({
+        "Errors" : errors
+        }), 400
     try:
         database.change_order_status(parcelId, data.get('status'))
         return jsonify({
