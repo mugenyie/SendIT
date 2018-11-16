@@ -27,6 +27,43 @@ class DatabaseConnection:
     except:
         pprint("Failed To Connect to Database")
 
+    def create_database_relations(self):
+        create_users_command = """
+        CREATE TABLE IF NOT EXISTS users(
+        id SERIAL PRIMARY KEY,
+        firstname VARCHAR(255) NOT NULL,
+        lastname VARCHAR(255) NOT NULL,
+        othernames VARCHAR(255),
+        email VARCHAR(255) NOT NULL,
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(500) NOT NULL,
+        registered timestamp with time zone DEFAULT now(),
+        isAdmin boolean DEFAULT FALSE,
+        updatedOn timestamp with time zone
+        )
+        """
+        create_parcels_command = """
+        CREATE TABLE IF NOT EXISTS parcels(
+            id SERIAL PRIMARY KEY,
+            placedBy INTEGER NOT NULL,
+            weight FLOAT,
+            weightmetric VARCHAR(15),
+            sentOn timestamp with time zone,
+            deliveredOn timestamp with time zone,
+            status VARCHAR(15) NOT NULL,
+            "from" VARCHAR(255) NOT NULL,
+            "to" VARCHAR(255) NOT NULL,
+            currentlocation VARCHAR(255),
+            isCanceled boolean DEFAULT FALSE,
+            updatedOn timestamp with time zone,
+            FOREIGN KEY (placedBy)
+                REFERENCES users (id)
+                ON UPDATE CASCADE ON DELETE CASCADE
+        )
+        """
+        self.cursor.execute(create_users_command)
+        self.cursor.execute(create_parcels_command)
+        return
 
 #  CRUD Methods
     def create_user(self, data={}):
@@ -137,14 +174,6 @@ class DatabaseConnection:
         columns = [col[0] for col in self.cursor.description]
         parcels = [dict(zip(columns, parcel)) for parcel in self.cursor.fetchall()]        
         return parcels
-
-    # def get_specific_parcel_order_id(self, parcelId):
-    #     get_parcel_orders_command = """
-    #     SELECT * from parcels WHERE id = {}
-    #     """.format(parcelId)
-    #     self.cursor.execute(get_parcel_orders_command)
-    #     parcel = self.cursor.fetchone()
-    #     return parcel
 
     def get_parcel_orders_by_user(self, userId):
         get_parcel_orders_command = """
