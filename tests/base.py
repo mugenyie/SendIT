@@ -1,6 +1,10 @@
 import unittest
 from api import app
+from api.database import DatabaseConnection
 
+
+database = DatabaseConnection()
+database.create_database_relations() #create relations if ttey dont exist
 
 class BaseTestCase(unittest.TestCase):
 
