@@ -58,18 +58,18 @@ def login_user():
         }), 400
     try:
         user = User(data).fetch_user_by_username_and_password()
-        if not user:
-            error_null_user = 'User does not exist'
+        if user:
             return jsonify({
-                "Errors" : error_null_user
+                'status': 200,
+                'data': [{
+                    'token': '',
+                    'user': user 
+                }]
+                }), 200  
+        else:
+            return jsonify({
+                "Errors" : "User does not exist"
             }), 404
-        return jsonify({
-            'status': 200,
-            'data': [{
-                'token': '',
-                'user': user 
-            }]
-        }), 200
     except Exception as e:
         print(e)
         return jsonify({

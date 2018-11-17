@@ -1,7 +1,7 @@
 from api.routes import base
 from flask import request, jsonify, Blueprint
 import datetime
-from api.validations.parcel import validate_id, validate_parcel_order_id, validate_parcel_destination, validate_change_order_status, validate_parcel_location, check_is_delivered, validate_parcel_data
+from api.validations.parcel import validate_id, validate_parcel_order_id, check_is_delivered, validate_parcel_data
 from api.validations.user import validate_userid, validate_if_isadmin
 from api.order_status_enum import OrderStatus
 from api.models.parcel import Parcel
@@ -72,10 +72,15 @@ FETCH A SPECIFIC DELIVERY ORDER
 def get_specific_delivery_order(parcelId):
     try:
         parcel = Parcel({'parcelId':parcelId}).get_specific_parcel_order()
-        return jsonify({
-            'status': 200,
-            'data': parcel
-        }), 200
+        if parcel:
+            return jsonify({
+                'status': 200,
+                'data': parcel
+            }), 200
+        else:
+            return jsonify({
+                "Error" : "Order not found",
+            }), 404
     except Exception as e:
         return jsonify({
             "Error" : str(e),
@@ -94,10 +99,15 @@ def get_user_delivery_orders(userId):
         }), 404
     try:
         parcel = Parcel({'placedby': userId}).get_parcel_orders_by_user()
-        return jsonify({
-            'status': 200,
-            'data': parcel
-        }), 200
+        if parcel:
+            return jsonify({
+                'status': 200,
+                'data': parcel
+            }), 200
+        else:
+            return jsonify({
+                "Error" : "Order not found",
+            }), 404
     except Exception as e:
         return jsonify({
             "Error" : str(e),
@@ -111,11 +121,11 @@ CANCEL A SPECIFIC DELIVERY ORDER
 def cancel_delivery_order(parcelId):
     if validate_parcel_order_id(parcelId):
         return jsonify({
-            "Errors" : "Parcel order not found"
+            "Errors" : "Order not found"
         }), 404
     if check_is_delivered(parcelId):
         return jsonify({
-            "Errors" : "Delivered order can not be canceled"
+            "Errors" : "Order already delivered can not be canceled"
         }), 400
     try:
         Parcel({'parcelId': parcelId}).cancel_delivery_order()
@@ -141,14 +151,14 @@ def change_destination_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
     if validate_parcel_order_id(parcelId):
         return jsonify({
-            "Errors" : "Parcel order not found"
+            "Errors" : "Order not found"
         }), 404
+    errors = {}
+    if not data.get('to'):
+        errors.update({'to':'Destination can not be null'})
     if check_is_delivered(parcelId):
-        return jsonify({
-            "Errors" : "Delivered order can not be canceled"
-        }), 400
-    errors = validate_parcel_destination(data.get('to'))
-    if len(errors) > 0:
+        errors.update({'parcelId':'Order already delivered can not be canceled'})
+    if errors:
         return jsonify({
             "Errors" : errors
         }), 400
@@ -183,7 +193,7 @@ def change_status_parcel_delivery_order(parcelId):
     if not Parcel({"parcelId": parcelId}).get_specific_parcel_order():
         return jsonify({
             "Errors" : "Parcel order not found"
-        }), 401
+        }), 404
     if not data.get('status'):
         return jsonify({
             "Errors" : "Order status can not be null"
@@ -219,7 +229,7 @@ def change_present_location_of_order(parcelId):
     if not Parcel({"parcelId": parcelId}).get_specific_parcel_order():
         return jsonify({
             "Errors" : "Parcel order not found"
-        }), 401
+        }), 404
     if not data.get('currentlocation'):
         return jsonify({
             "Errors" : "Current location can not be null"

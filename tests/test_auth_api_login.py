@@ -7,8 +7,6 @@ from .base import BaseTestCase
 
 
 class LoginAuthApiTestCase(BaseTestCase):
-
-
     # User login tests
 
     def test_that_password_is_not_empty(self):
@@ -22,6 +20,18 @@ class LoginAuthApiTestCase(BaseTestCase):
             data=json.dumps(user)
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_login_unregistered_user(self):
+        user = dict(
+            username = 'dsrgretrgrt',
+            password = 'gtrtrtrhhtyh'
+        )
+        response = self.client.post(
+            self.default_login_endpoint,
+            content_type='application/json',
+            data=json.dumps(user)
+        )
+        self.assertEqual(response.status_code, 404)
 
 
     def test_with_empty_username(self):

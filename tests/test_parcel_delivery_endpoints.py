@@ -47,17 +47,12 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
 
 
     def test_fetch_specific_delivery_order_invalid_id(self):
-        response = self.client.get('api/v1/parcels/p')
+        response = self.client.get('api/v1/parcels/2569845')
         self.assertEqual(response.status_code, 404)
 
 
-    def test_fetch_orders_by_wrong_user(self):
-        response = self.client.get('api/v1/users/0/parcels')
-        self.assertEqual(response.status_code, 404)
-
-
-    def test_fetch_orders_with_wrong_user(self):
-        response = self.client.get('api/v1/users/0/parcels')
+    def test_fetch_orders_by_unregistered_user(self):
+        response = self.client.get('api/v1/users/84684615/parcels')
         self.assertEqual(response.status_code, 404)
 
     

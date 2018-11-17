@@ -34,24 +34,6 @@ def validate_parcel_order_id(parcelId):
         errors['parcelId'] = 'Parcel order not found'
     return errors
 
-def validate_parcel_destination(destination):
-    errors = {}
-    if not destination:
-        errors['destination'] = 'Order destination can not be null'
-    return errors
-    
-def validate_change_order_status(data):
-    errors = {}
-    if not data.get('status'):
-        errors['Status'] = 'Order status can not be null'
-    return errors
-    
-def validate_parcel_location(currentlocation):
-    errors = {}
-    if not currentlocation:
-        errors['currentlocation'] = 'Current location can not be null'
-    return errors
-
 def check_is_delivered(parcelId):
     errors = {}
     order_status = Parcel({"parcelId": parcelId}).check_order_status()
