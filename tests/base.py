@@ -1,6 +1,6 @@
 import unittest
 from api import app
-from api.database import DatabaseConnection
+from api.models.database import DatabaseConnection
 
 
 database = DatabaseConnection()

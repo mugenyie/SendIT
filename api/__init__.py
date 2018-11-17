@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
-from api.views.base_view import base_api
-from api.views.parcel_view_api import parcel_api
-from api.views.user_view_api import user_api
+from api.routes.base import base_api
+from api.routes.parcel_api import parcel_api
+from api.routes.user_api import user_api
 
 
 app = Flask(__name__)
