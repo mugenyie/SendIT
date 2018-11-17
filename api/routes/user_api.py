@@ -1,14 +1,21 @@
-from api.views import base_view
+from api.routes import base
 from flask import request, jsonify, Blueprint
 import datetime
 from api.validations.user import validate_user_registration_details, validate_null_user_data , validate_user_login_details, validate_if_isadmin, validate_userid
+from api.models.user import User
+
   
-  
-database = base_view.database
-user_api = Blueprint('user_api', 'user_view_api', url_prefix='/api/v1')
+user_api = Blueprint('user_api', 'user_api', url_prefix='/api/v1')
 
 """
 POST  /auth/signup
+{
+    "username":"columbus",
+    "email": "mugenyie@gmail.com",
+    "firstname": "Emmanuel",
+    "lastname": "mugenyie@gmail.com",
+    "password": "12345"
+}
 CREATE A USER ACCOUNT 
 """
 @user_api.route('/auth/signup', methods=['POST'])
@@ -20,10 +27,10 @@ def create_user():
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors
-        }), 404
+        }), 400
     data['registered'] = datetime.datetime.now()
     try:
-        user = database.create_user(data)
+        user = User(data).create_user()
         return jsonify({
             'status': 201,
             'data': [{
@@ -48,9 +55,9 @@ def login_user():
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors
-        }), 404
+        }), 400
     try:
-        user = database.fetch_user_by_username_and_password(data)
+        user = User(data).fetch_user_by_username_and_password()
         if not user:
             error_null_user = 'User does not exist'
             return jsonify({
@@ -67,5 +74,5 @@ def login_user():
         print(e)
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 

@@ -18,13 +18,11 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
         self.assertEqual(response.status_code, 201)
 
     def test_registration_email_with_space(self):
@@ -36,14 +34,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_registration_email_is_empty(self):
@@ -55,14 +51,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_email_is_invalid(self):
@@ -74,14 +68,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_that_username_has_no_invalid_characters(self):
@@ -93,14 +85,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
     
     def test_that_username_is_not_empty(self):
@@ -112,14 +102,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_that_firstname_is_not_empty(self):
@@ -131,14 +119,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_that_lastname_is_not_empty(self):
@@ -150,14 +136,12 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = self.default_password
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_that_password_is_not_empty(self):
@@ -169,11 +153,9 @@ class SignUpAuthApiTestCase(BaseTestCase):
             othernames = self.default_othernames,
             password = ''
         )
-
         response = self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
             data=json.dumps(user)
         )
-
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 400)

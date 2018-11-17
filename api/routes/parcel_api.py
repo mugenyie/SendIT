@@ -1,30 +1,40 @@
-from api.views import base_view
+from api.routes import base
 from flask import request, jsonify, Blueprint
 import datetime
-from api.validations.parcel import validate_parcel_order, validate_id, validate_parcel_order_id, validate_parcel_destination, validate_change_order_status, validate_parcel_location, validate_null_parcel_data
+from api.validations.parcel import validate_id, validate_parcel_order_id, validate_parcel_destination, validate_change_order_status, validate_parcel_location, check_is_delivered, validate_parcel_data
 from api.validations.user import validate_userid, validate_if_isadmin
+from api.order_status_enum import OrderStatus
+from api.models.parcel import Parcel
 
 
-database = base_view.database
-parcel_api = Blueprint('parcel_api', 'parcel_view_api', url_prefix='/api/v1')
 
-# Parcel delivery Endpoints
+parcel_api = Blueprint('parcel_api', 'parcel_api', url_prefix='/api/v1')
+
 """
 POST /parcels: 
+{
+	"placedby": 87,
+    "to": "87",
+    "from": "kamwokya",
+    "weight": 4,
+    "weightmetric": "Kg"
+}
 CREATE A PARCEL DELIVERY ORDER 
 """
 @parcel_api.route('/parcels', methods=['POST'])
 def create_parcel_delivery_order():
     data = request.get_json(force=True)
-    error_null_data = validate_null_parcel_data(data)
-    errors = validate_parcel_order(data)
-    errors.update(error_null_data)
+    if validate_userid(data.get('placedby')):
+        return jsonify({
+            "Errors" : "User not found"
+        }), 404
+    errors = validate_parcel_data(data)
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors
-        }), 404
+        }), 400
     try:
-        parcel = database.creat_parcel_delivery_order(data)
+        parcel = Parcel(data).creat_parcel_delivery_order()
         return jsonify({
             'status': 201,
             'data': [{
@@ -35,7 +45,7 @@ def create_parcel_delivery_order():
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 """
 GET /parcels 
@@ -44,7 +54,7 @@ FETCH ALL PARCEL DELIVERY ORDERS
 @parcel_api.route('/parcels', methods=['GET'])
 def get_all_parcels():
     try:
-        parcels = database.get_all_parcel_order()
+        parcels = Parcel().get_all_parcel_order()
         return jsonify({
             'status': 200,
             'data': parcels
@@ -52,7 +62,7 @@ def get_all_parcels():
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 """
 GET /parcels/<parcelId> 
@@ -61,7 +71,7 @@ FETCH A SPECIFIC DELIVERY ORDER
 @parcel_api.route('/parcels/<int:parcelId>', methods=['GET'])
 def get_specific_delivery_order(parcelId):
     try:
-        parcel = database.get_specific_parcel_order(parcelId)
+        parcel = Parcel({'parcelId':parcelId}).get_specific_parcel_order()
         return jsonify({
             'status': 200,
             'data': parcel
@@ -69,7 +79,7 @@ def get_specific_delivery_order(parcelId):
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 """
 GET /users/<userId>/parcels 
@@ -80,10 +90,10 @@ def get_user_delivery_orders(userId):
     errors = validate_userid(userId)
     if len(errors) > 0:
         return jsonify({
-            "Errors" : errors
+            "Errors" : "User not found"
         }), 404
     try:
-        parcel = database.get_parcel_orders_by_user(userId)
+        parcel = Parcel({'placedby': userId}).get_parcel_orders_by_user()
         return jsonify({
             'status': 200,
             'data': parcel
@@ -91,7 +101,7 @@ def get_user_delivery_orders(userId):
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 """
 PATCH  /parcels/<parcelId>/cancel 
@@ -99,13 +109,16 @@ CANCEL A SPECIFIC DELIVERY ORDER
 """
 @parcel_api.route('/parcels/<int:parcelId>/cancel', methods=['PATCH'])
 def cancel_delivery_order(parcelId):
-    errors = validate_parcel_order_id(parcelId)
-    if len(errors) > 0:
+    if validate_parcel_order_id(parcelId):
         return jsonify({
-            "Errors" : errors
+            "Errors" : "Parcel order not found"
         }), 404
+    if check_is_delivered(parcelId):
+        return jsonify({
+            "Errors" : "Delivered order can not be canceled"
+        }), 400
     try:
-        database.cancel_delivery_order(parcelId)
+        Parcel({'parcelId': parcelId}).cancel_delivery_order()
         return jsonify({
             'status': 200,
             'data': [{
@@ -116,7 +129,7 @@ def cancel_delivery_order(parcelId):
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 
 """
@@ -126,15 +139,21 @@ CHANGE DESTINATION OF SPECIFIC PARCEL DELIVERY ORDER
 @parcel_api.route('/parcels/<int:parcelId>/destination', methods=['PATCH'])
 def change_destination_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
-    errors_parcel = validate_parcel_order_id(parcelId)
+    if validate_parcel_order_id(parcelId):
+        return jsonify({
+            "Errors" : "Parcel order not found"
+        }), 404
+    if check_is_delivered(parcelId):
+        return jsonify({
+            "Errors" : "Delivered order can not be canceled"
+        }), 400
     errors = validate_parcel_destination(data.get('to'))
-    errors.update(errors_parcel)
     if len(errors) > 0:
         return jsonify({
             "Errors" : errors
         }), 400
     try:
-        database.change_order_destination(parcelId, data.get('to'))
+        Parcel({'parcelId': parcelId, 'to': data.get('to')}).change_order_destination()
         return jsonify({
             'status': 200,
             'data': [{
@@ -146,7 +165,7 @@ def change_destination_parcel_delivery_order(parcelId):
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 
 """
@@ -157,30 +176,32 @@ Only Admin
 @parcel_api.route('/parcels/<int:parcelId>/status', methods=['PATCH'])
 def change_status_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
-    errors_user = validate_if_isadmin(data.get('userid'))
-    if errors_user:
+    if validate_if_isadmin(data.get('userId')):
         return jsonify({
-        "Errors" : errors_user
+            "Errors" : "Only admin authorised to access the resource"
         }), 401
-    errors = validate_change_order_status(parcelId, data.get('status'))
-    if len(errors) > 0:
+    if not Parcel({"parcelId": parcelId}).get_specific_parcel_order():
         return jsonify({
-        "Errors" : errors
+            "Errors" : "Parcel order not found"
+        }), 401
+    if not data.get('status'):
+        return jsonify({
+            "Errors" : "Order status can not be null"
         }), 400
     try:
-        database.change_order_status(parcelId, data.get('status'))
+        Parcel({'parcelId': parcelId, 'status': data.get('status')}).change_order_status()
         return jsonify({
             'status': 200,
             'data': [{
                 'id': parcelId, #the parcel
-                'status': data.get('status'),
+                'status': data.get('status').upper(),
                 'message': 'Parcel status updated'
             }]
         }), 200
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
 
 
 """
@@ -191,22 +212,20 @@ Only Admin
 @parcel_api.route('/parcels/<int:parcelId>/currentlocation', methods=['PATCH'])
 def change_present_location_of_order(parcelId):
     data = request.get_json(force=True)
-    errors = validate_parcel_order_id(parcelId)
-    errors_user = validate_if_isadmin(data.get('userid'))
-    errors_location = validate_parcel_location(data.get('currentlocation'))
-    errors.update(errors_user)
-    errors.update(errors_location)
-    if len(errors) > 0:
-        if errors_user:
-            return jsonify({
-            "Errors" : errors_user
-            }), 401
-        else:
-            return jsonify({
-            "Errors" : errors
-            }), 400
+    if validate_if_isadmin(data.get('userId')):
+        return jsonify({
+            "Errors" : "Only admin authorised to access the resource"
+        }), 401
+    if not Parcel({"parcelId": parcelId}).get_specific_parcel_order():
+        return jsonify({
+            "Errors" : "Parcel order not found"
+        }), 401
+    if not data.get('currentlocation'):
+        return jsonify({
+            "Errors" : "Current location can not be null"
+        }), 400
     try:
-        database.change_order_status(parcelId, data.get('currentlocation'))
+        Parcel({'parcelId': parcelId, 'currentlocation': data.get('currentlocation')}).change_order_status()
         return jsonify({
             'status': 200,
             'data': [{
@@ -218,4 +237,4 @@ def change_present_location_of_order(parcelId):
     except Exception as e:
         return jsonify({
             "Error" : str(e),
-        }), 401
+        }), 400
