@@ -28,7 +28,7 @@ class DatabaseConnection:
         pprint("Failed To Connect to Database")
 
     def create_database_relations(self):
-        create_users_command = """
+        create_tables_command = """
         CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
         firstname VARCHAR(255) NOT NULL,
@@ -40,9 +40,8 @@ class DatabaseConnection:
         registered timestamp with time zone DEFAULT now(),
         isAdmin boolean DEFAULT FALSE,
         updatedOn timestamp with time zone
-        )
-        """
-        create_parcels_command = """
+        );
+
         CREATE TABLE IF NOT EXISTS parcels(
             id SERIAL PRIMARY KEY,
             placedBy INTEGER NOT NULL,
@@ -61,8 +60,7 @@ class DatabaseConnection:
                 ON UPDATE CASCADE ON DELETE CASCADE
         )
         """
-        self.cursor.execute(create_users_command)
-        self.cursor.execute(create_parcels_command)
+        self.cursor.execute(create_tables_command)
         return
 
 #  CRUD Methods

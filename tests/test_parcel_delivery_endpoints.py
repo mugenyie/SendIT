@@ -7,6 +7,26 @@ from api.models.user import User
 
 
 class ParcelDeliveryApiTestCase(BaseTestCase):
+    def test_create_order(self):
+        order = dict(
+                placedby="1",
+                weight="4",
+                weightmetric="Kg",
+                senton= "2018-11-13 02:05:13.344624+03",
+                to="ntinda"
+            )
+        order['from'] ="Nitnda"
+        response = self.client.post(
+            'api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(order)
+        )
+        self.assertEqual(response.status_code, 201)
+
+    def test_get_parcels(self):
+        response = self.client.get('api/v1/parcels')
+        self.assertEqual(response.status_code, 200)
+
     def test_create_order_with_inexistent_user(self):
         order = dict(
                 placedby="0",
@@ -24,21 +44,21 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    # def test_invalid_weight(self):
-    #     order = dict(
-    #         placedby="87",
-    #         weight="jkl",
-    #         weightmetric="Kg",
-    #         senton= "2018-11-13 02:05:13.344624+03",
-    #         to="ntinda",
-    #     )
-    #     order['from'] ="Nitnda"
-    #     response = self.client.post(
-    #         'api/v1/parcels',
-    #         content_type='application/json',
-    #         data=json.dumps(order)
-    #     )
-    #     self.assertEqual(response.status_code, 400)
+    def test_invalid_weight(self):
+        order = dict(
+            placedby="1",
+            weight="jkl",
+            weightmetric="Kg",
+            senton= "2018-11-13 02:05:13.344624+03",
+            to="ntinda",
+        )
+        order['from'] ="Nitnda"
+        response = self.client.post(
+            'api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(order)
+        )
+        self.assertEqual(response.status_code, 400)
 
 
     def test_that_get_all_parcels(self):
@@ -65,9 +85,20 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         response = self.client.patch('api/v1/parcels/0/destination')
         self.assertEqual(response.status_code, 400)
 
-    # def test_change_destination_with_empty_destination(self):
+    # def test_change_destination(self):
     #     destination = dict(
-    #             to="",
+    #             to="Kasese"
+    #         )
+    #     response = self.client.patch(
+    #         'api/v1/parcels/1/destination',
+    #         content_type='application/json',
+    #         data=json.dumps(destination)
+    #     )
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_change_destination_with_empty(self):
+    #     destination = dict(
+    #             to=""
     #         )
     #     response = self.client.patch(
     #         'api/v1/parcels/1/destination',
@@ -75,7 +106,6 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
     #         data=json.dumps(destination)
     #     )
     #     self.assertEqual(response.status_code, 400)
-
 
     def test_change_order_status_with_empty(self):
         response = self.client.patch('api/v1/parcels/4/status')
