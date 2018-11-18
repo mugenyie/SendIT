@@ -9,9 +9,9 @@ def validate_parcel_data(data):
     errors = {}
     if not data.get('weight'):
         errors['no_weight'] = 'Weight can not be null'
-    else:
-        if not validate_float(data.get('weight')):
-            errors['invalidweight'] = 'Invalid weight'
+    # else:
+    #     if not validate_float(data.get('weight')):
+    #         errors['invalidweight'] = 'Invalid weight'
     if not data.get('to'):
         errors['to'] = 'Destination field can not be null'
     if not data.get('from'):

@@ -12,7 +12,7 @@ def validate_alphanumeric(str):
     return re.match('^[a-zA-Z0-9]+$', str)
 
 def validate_float(float_):
-    return re.match(r'[-+]?([0-9]*\.[0-9]+|[0-9]+)',float_)
+    return re.match('[+-]?([0-9]*[.])?[0-9]+',float_)
 
 def validate_integer(interger):
     return re.match(r'^[0-9]*$',interger)

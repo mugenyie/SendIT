@@ -42,7 +42,7 @@ def create_user():
         print(e)
         return jsonify({
             "Error" : str(e)
-        }), 401
+        }), 400
 
 """
 POST  /auth/login 

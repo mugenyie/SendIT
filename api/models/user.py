@@ -57,7 +57,7 @@ class User:
 
     def fetch_user_by_id(self):
         get_user_by_id_command = """
-        SELECT * FROM users WHERE "id"='{}'
+        SELECT * FROM users WHERE "id"={}
         """.format(self.userId)
         database.cursor.execute(get_user_by_id_command)
         user = database.cursor.fetchone()
