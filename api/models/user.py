@@ -1,5 +1,5 @@
 from api.models.database import DatabaseConnection
-from utils import encrypt_password
+from api.utils import encrypt_password
 
 
 database = DatabaseConnection()

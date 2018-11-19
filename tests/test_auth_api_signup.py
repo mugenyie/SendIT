@@ -1,7 +1,7 @@
 import unittest
 import json
 from api import app
-from utils import string_generator
+from api.utils import string_generator
 from .base import BaseTestCase
 
 

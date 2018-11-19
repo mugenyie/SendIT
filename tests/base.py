@@ -1,3 +1,4 @@
+import json
 import unittest
 from api import app
 from api.models.database import DatabaseConnection
@@ -31,6 +32,23 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
+        self.user = dict(
+            email = self.default_email,
+            username = self.default_username,
+            firstname = self.default_firstname,
+            lastname = self.default_lastname,
+            othernames = self.default_othernames,
+            password = self.default_password
+        )
+
+        self.client.post(
+            self.default_signup_endpoint,
+            content_type='application/json',
+            data=json.dumps(self.user)
+        )
+        response = self.client.post(self.default_login_endpoint, json=self.user)
+        data = response.get_json(force=True).get('data')
+        self.token = data[0].get('token')
+
     def tearDown(self):
-        # method to invoke after each test.
         pass
