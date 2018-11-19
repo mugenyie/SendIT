@@ -4,7 +4,7 @@ from datetime import datetime
 import urllib.parse as urlparse
 from dotenv import load_dotenv
 from urllib.parse import urlparse
-from utils import encrypt_password
+from api.utils import encrypt_password
 import os
 
 

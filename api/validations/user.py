@@ -1,5 +1,5 @@
 import re
-from utils import validate_alphanumeric, validate_email, encrypt_password
+from api.utils import validate_alphanumeric, validate_email, encrypt_password
 from api.models.parcel import Parcel
 from api.models.user import User
 

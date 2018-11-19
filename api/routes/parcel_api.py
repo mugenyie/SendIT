@@ -5,6 +5,7 @@ from api.validations.parcel import validate_id, validate_parcel_order_id, check_
 from api.validations.user import validate_userid, validate_if_isadmin
 from api.order_status_enum import OrderStatus
 from api.models.parcel import Parcel
+from api.utils import token_required, encode_auth_token
 
 
 
@@ -22,16 +23,19 @@ POST /parcels:
 CREATE A PARCEL DELIVERY ORDER 
 """
 @parcel_api.route('/parcels', methods=['POST'])
+@token_required
 def create_parcel_delivery_order():
     data = request.get_json(force=True)
     if validate_userid(data.get('placedby')):
         return jsonify({
-            "Errors" : "User not found"
+            'status': 404,
+            'error' : 'User not found'
         }), 404
     errors = validate_parcel_data(data)
     if len(errors) > 0:
         return jsonify({
-            "Errors" : errors
+            'status': 400,
+            'error' : errors
         }), 400
     try:
         parcel = Parcel(data).creat_parcel_delivery_order()
@@ -44,7 +48,8 @@ def create_parcel_delivery_order():
         }), 201
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
 """
@@ -52,6 +57,7 @@ GET /parcels
 FETCH ALL PARCEL DELIVERY ORDERS 
 """
 @parcel_api.route('/parcels', methods=['GET'])
+@token_required
 def get_all_parcels():
     try:
         parcels = Parcel().get_all_parcel_order()
@@ -61,7 +67,8 @@ def get_all_parcels():
         }), 200
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
 """
@@ -69,6 +76,7 @@ GET /parcels/<parcelId>
 FETCH A SPECIFIC DELIVERY ORDER 
 """
 @parcel_api.route('/parcels/<int:parcelId>', methods=['GET'])
+@token_required
 def get_specific_delivery_order(parcelId):
     try:
         parcel = Parcel({'parcelId':parcelId}).get_specific_parcel_order()
@@ -79,11 +87,13 @@ def get_specific_delivery_order(parcelId):
             }), 200
         else:
             return jsonify({
-                "Error" : "Order not found",
+                'status': 404,
+                'error' : 'Order not found',
             }), 404
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
 """
@@ -91,11 +101,13 @@ GET /users/<userId>/parcels
 FETCH ALL PARCEL DELIVERY ORDERS BY A SPECIFIC USER
 """
 @parcel_api.route('/users/<int:userId>/parcels', methods=['GET'])
+@token_required
 def get_user_delivery_orders(userId):
     errors = validate_userid(userId)
     if len(errors) > 0:
         return jsonify({
-            "Errors" : "User not found"
+            'status': 404,
+            'error' : 'User not found'
         }), 404
     try:
         parcel = Parcel({'placedby': userId}).get_parcel_orders_by_user()
@@ -106,7 +118,8 @@ def get_user_delivery_orders(userId):
             }), 200
         else:
             return jsonify({
-                "Error" : "Order not found",
+                'status': '404',
+                'error' : 'Order not found',
             }), 404
     except Exception as e:
         return jsonify({
@@ -118,14 +131,17 @@ PATCH  /parcels/<parcelId>/cancel
 CANCEL A SPECIFIC DELIVERY ORDER 
 """
 @parcel_api.route('/parcels/<int:parcelId>/cancel', methods=['PATCH'])
+@token_required
 def cancel_delivery_order(parcelId):
     if validate_parcel_order_id(parcelId):
         return jsonify({
-            "Errors" : "Order not found"
+            'status': 404,
+            'error' : 'Order not found'
         }), 404
     if check_is_delivered(parcelId):
         return jsonify({
-            "Errors" : "Order already delivered can not be canceled"
+            'status': 400,
+            'error' : 'Order already delivered can not be canceled'
         }), 400
     try:
         Parcel({'parcelId': parcelId}).cancel_delivery_order()
@@ -138,7 +154,8 @@ def cancel_delivery_order(parcelId):
         }), 200
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
 
@@ -147,11 +164,13 @@ PATCH  /parcels/<parcelId>/destination
 CHANGE DESTINATION OF SPECIFIC PARCEL DELIVERY ORDER
 """
 @parcel_api.route('/parcels/<int:parcelId>/destination', methods=['PATCH'])
+@token_required
 def change_destination_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
     if validate_parcel_order_id(parcelId):
         return jsonify({
-            "Errors" : "Order not found"
+            'status': 404,
+            'error' : 'Order not found'
         }), 404
     errors = {}
     if not data.get('to').trim():
@@ -160,7 +179,8 @@ def change_destination_parcel_delivery_order(parcelId):
         errors.update({'parcelId':'Order already delivered can not be canceled'})
     if errors:
         return jsonify({
-            "Errors" : errors
+            'status': 400,
+            'error' : errors
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'to': data.get('to')}).change_order_destination()
@@ -174,7 +194,8 @@ def change_destination_parcel_delivery_order(parcelId):
         }), 200
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
 
@@ -184,19 +205,23 @@ Change the status of a specific parcel delivery order
 Only Admin
 """
 @parcel_api.route('/parcels/<int:parcelId>/status', methods=['PATCH'])
+@token_required
 def change_status_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
     if validate_if_isadmin(data.get('userId')):
         return jsonify({
-            "Errors" : "Only admin authorised to access the resource"
+            'status': 401,
+            'error' : 'Only admin authorised to access the resource'
         }), 401
     if not Parcel({"parcelId": parcelId}).get_specific_parcel_order():
         return jsonify({
-            "Errors" : "Parcel order not found"
+            'status': 404,
+            'error' : 'Parcel order not found'
         }), 404
     if not data.get('status'):
         return jsonify({
-            "Errors" : "Order status can not be null"
+            'status': 400,
+            'error' : 'Order status can not be null'
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'status': data.get('status')}).change_order_status()
@@ -210,7 +235,8 @@ def change_status_parcel_delivery_order(parcelId):
         }), 200
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
 
@@ -220,19 +246,23 @@ Change the present location of a specific parcel delivery order.
 Only Admin
 """
 @parcel_api.route('/parcels/<int:parcelId>/currentlocation', methods=['PATCH'])
+@token_required
 def change_present_location_of_order(parcelId):
     data = request.get_json(force=True)
     if validate_if_isadmin(data.get('userId')):
         return jsonify({
-            "Errors" : "Only admin authorised to access the resource"
+            'status': 401,
+            'error' : 'Only admin authorised to access the resource'
         }), 401
     if not Parcel({"parcelId": parcelId}).get_specific_parcel_order():
         return jsonify({
-            "Errors" : "Parcel order not found"
+            'status': 404,
+            'error' : 'Parcel order not found'
         }), 404
     if not data.get('currentlocation'):
         return jsonify({
-            "Errors" : "Current location can not be null"
+            'status': 400,
+            'error' : 'Current location can not be null'
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'currentlocation': data.get('currentlocation')}).change_order_status()
@@ -246,5 +276,6 @@ def change_present_location_of_order(parcelId):
         }), 200
     except Exception as e:
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400

@@ -1,4 +1,4 @@
-from utils import validate_float, validate_datetime, validate_integer
+from api.utils import validate_float, validate_datetime, validate_integer
 from api.order_status_enum import OrderStatus
 from api.models.parcel import Parcel
 from api.models.user import User

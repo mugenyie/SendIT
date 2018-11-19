@@ -1,5 +1,6 @@
 from api.routes import base
 from flask import request, jsonify, Blueprint
+from api.utils import encode_auth_token
 import datetime
 from api.validations.user import validate_user_registration_details, validate_null_user_data , validate_user_login_details, validate_if_isadmin, validate_userid
 from api.models.user import User
@@ -26,22 +27,25 @@ def create_user():
     errors.update(null_errors)
     if len(errors) > 0:
         return jsonify({
-            "Errors" : errors
+            'status': 400,
+            'error' : errors
         }), 400
     data['registered'] = datetime.datetime.now()
     try:
         user = User(data).create_user()
-        return jsonify({
-            'status': 201,
-            'data': [{
-                'token': '',
-                'user': user
-            }]
-        }), 201
+        if user:
+            return jsonify({
+                'status': 201,
+                'data': [{
+                    'token': encode_auth_token(user.get('username')),
+                    'user': user
+                }]
+            }), 201
     except Exception as e:
         print(e)
         return jsonify({
-            "Error" : str(e)
+            'status': 400,
+            'error' : str(e)
         }), 400
 
 """
@@ -54,25 +58,28 @@ def login_user():
     errors = validate_user_login_details(data)
     if len(errors) > 0:
         return jsonify({
-            "Errors" : errors
+            'status': 400,
+            'error' : errors
         }), 400
     try:
         user = User(data).fetch_user_by_username_and_password()
         if user:
-            return jsonify({
+           return jsonify({
                 'status': 200,
                 'data': [{
-                    'token': '',
+                    'token': encode_auth_token(user.get('username')),
                     'user': user 
                 }]
                 }), 200  
         else:
             return jsonify({
-                "Errors" : "User does not exist"
+                'status': 404,
+                'error' : 'User does not exist'
             }), 404
     except Exception as e:
         print(e)
         return jsonify({
-            "Error" : str(e),
+            'status': 400,
+            'error' : str(e),
         }), 400
 
