@@ -1,618 +1,698 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "description": "SendIT is a courier service that helps users deliver parcels to different destinations.",
-      "version": 1,
-      "title": "SendIT API Documentation",
-      "contact": {
-        "email": "ecmugenyi@gmail.com"
-      },
-      "license": {
-        "name": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+  "swagger": "2.0",
+  "info": {
+    "description": "SendIT is a courier service that helps users deliver parcels to different destinations.",
+    "version": 1,
+    "title": "SendIT API Documentation",
+    "contact": {
+      "name": "Emmanuel Columbus Mugenyi",
+      "email": "ecmugenyi@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "127.0.0.1:5000",
+  "basePath": "/api/v1/docs",
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations about user",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
       }
     },
-    "host": "127.0.0.1:5000",
-    "basePath": "/api/v1/",
-    "tags": [
-      {
-        "name": "user",
-        "description": "Operations about user",
-        "externalDocs": {
-          "description": "Find out more about our store",
-          "url": "http://swagger.io"
-        }
-      },
-      {
-        "name": "parcel",
-        "description": "Everything about Parcel delivery orders",
-        "externalDocs": {
-          "description": "Find out more",
-          "url": "http://swagger.io"
-        }
-      }
-    ],
-    "paths": {
-      "/auth/login": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Login a user",
-          "description": "",
-          "operationId": "loginUser",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Login user object",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/UserLogin"
-              }
-            }
-          ],
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/auth/signup": {
-        "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Create a user account.",
-          "description": "",
-          "operationId": "createUser",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Created user object",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/UserSignUp"
-              }
-            }
-          ],
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/parcels": {
-        "post": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Create a parcel delivery order",
-          "description": "",
-          "operationId": "createParcel",
-          "consumes": [
-            "application/json",
-            "application/xml"
-          ],
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Parcel object that needs to be created",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/CreateParcel"
-              }
-            }
-          ],
-          "responses": {
-            "405": {
-              "description": "Invalid input"
-            }
-          },
-          "security": [
-            {
-              "petstore_auth": [
-                "write:pets",
-                "read:pets"
-              ]
-            }
-          ]
-        },
-        "get": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Fetch all parcel delivery orders",
-          "description": "",
-          "operationId": "fetchParcels",
-          "consumes": [
-            "application/json",
-            "application/xml"
-          ],
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Pet object that needs to be added to the store",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/Parcel"
-              }
-            }
-          ],
-          "responses": {
-            "400": {
-              "description": "Invalid ID supplied"
-            },
-            "404": {
-              "description": "Pet not found"
-            },
-            "405": {
-              "description": "Validation exception"
-            }
-          },
-          "security": [
-            {
-              "petstore_auth": [
-                "write:pets",
-                "read:pets"
-              ]
-            }
-          ]
-        }
-      },
-      "/parcels/parcelId": {
-        "get": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Fetch a specific delivery order",
-          "description": "",
-          "operationId": "findSpecificParcel",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "status",
-              "in": "query",
-              "description": "Status values that need to be considered for filter",
-              "required": true,
-              "schema": {}
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/Pet"
-                }
-              }
-            },
-            "400": {
-              "description": "Invalid status value"
-            }
-          },
-          "security": [
-            {
-              "petstore_auth": [
-                "write:pets",
-                "read:pets"
-              ]
-            }
-          ]
-        }
-      },
-      "/users/{userId}/parcels": {
-        "get": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Finds Pets by tags",
-          "description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-          "operationId": "findPetsByTags",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "tags",
-              "in": "query",
-              "description": "Tags to filter by",
-              "required": true,
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "collectionFormat": "multi"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/Pet"
-                }
-              }
-            },
-            "400": {
-              "description": "Invalid tag value"
-            }
-          },
-          "security": [
-            {
-              "petstore_auth": [
-                "write:pets",
-                "read:pets"
-              ]
-            }
-          ],
-          "deprecated": true
-        }
-      },
-      "/parcels/{parcelId}/cancel": {
-        "patch": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Deletes a pet",
-          "description": "",
-          "operationId": "deletePet",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "api_key",
-              "in": "header",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "petId",
-              "in": "path",
-              "description": "Pet id to delete",
-              "required": true,
-              "type": "integer",
-              "format": "int64"
-            }
-          ],
-          "responses": {
-            "400": {
-              "description": "Invalid ID supplied"
-            },
-            "404": {
-              "description": "Pet not found"
-            }
-          },
-          "security": [
-            {
-              "petstore_auth": [
-                "write:pets",
-                "read:pets"
-              ]
-            }
-          ]
-        }
-      },
-      "/parcels/{parcelId}/destination": {
-        "patch": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Creates list of users with given input array",
-          "description": "",
-          "operationId": "createUsersWithListInput",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "List of user object",
-              "required": true,
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/User"
-                }
-              }
-            }
-          ],
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      },
-      "/parcels/{parcelId}/status": {
-        "patch": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Logs user into the system",
-          "description": "",
-          "operationId": "loginUser",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "username",
-              "in": "query",
-              "description": "The user name for login",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "password",
-              "in": "query",
-              "description": "The password for login in clear text",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "successful operation",
-              "schema": {
-                "type": "string"
-              },
-              "headers": {
-                "X-Rate-Limit": {
-                  "type": "integer",
-                  "format": "int32",
-                  "description": "calls per hour allowed by the user"
-                },
-                "X-Expires-After": {
-                  "type": "string",
-                  "format": "date-time",
-                  "description": "date in UTC when token expires"
-                }
-              }
-            },
-            "400": {
-              "description": "Invalid username/password supplied"
-            }
-          }
-        }
-      },
-      "/parcels/{parcelId}/currentlocation": {
-        "patch": {
-          "tags": [
-            "parcel"
-          ],
-          "summary": "Logs out current logged in user session",
-          "description": "",
-          "operationId": "logoutUser",
-          "produces": [
-            "application/xml",
-            "application/json"
-          ],
-          "parameters": [],
-          "responses": {
-            "default": {
-              "description": "successful operation"
-            }
-          }
-        }
-      }
-    },
-    "securityDefinitions": {
-      "petstore_auth": {
-        "type": "oauth2",
-        "authorizationUrl": "https://petstore.swagger.io/oauth/dialog",
-        "flow": "implicit",
-        "scopes": {
-          "write:pets": "modify pets in your account",
-          "read:pets": "read your pets"
-        }
-      },
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
-      }
-    },
-    "definitions": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "username": {
-            "type": "string"
-          },
-          "othernames": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "registered": {
-            "type": "string"
-          },
-          "firstname": {
-            "type": "string"
-          },
-          "lastname": {
-            "type": "string"
-          },
-          "isadmin": {
-            "type": "boolean"
-          }
-        },
-        "xml": {
-          "name": "User"
-        }
-      },
-      "UserLogin": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
-        },
-        "xml": {
-          "name": "User"
-        }
-      },
-      "UserSignUp": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "othernames": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "firstname": {
-            "type": "string"
-          },
-          "lastname": {
-            "type": "string"
-          },
-          "isadmin": {
-            "type": "boolean"
-          }
-        },
-        "xml": {
-          "name": "User"
-        }
-      },
-      "Parcel": {
-        "type": "object",
-        "required": [
-          "placedby",
-          "weight",
-          "weightmetric",
-          "to",
-          "from"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "placedBy": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "weight": {
-            "type": "number"
-          },
-          "weightmetric": {
-            "type": "string",
-            "example": "Kg"
-          },
-          "sentOn": {
-            "type": "string"
-          },
-          "deliveredOn": {
-            "type": "string"
-          },
-          "from": {
-            "type": "string"
-          },
-          "to": {
-            "type": "string"
-          },
-          "currentlocation": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "description": "Parcel status in the store",
-            "enum": [
-              "placed",
-              "transiting",
-              "delivered"
-            ]
-          },
-          "isCanceled": {
-            "type": "boolean"
-          }
-        },
-        "xml": {
-          "name": "Parcel"
-        }
-      },
-      "CreateParcel": {
-        "type": "object",
-        "required": [
-          "placedby",
-          "weight",
-          "weightmetric",
-          "to",
-          "from"
-        ],
-        "properties": {
-          "placedBy": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "weight": {
-            "type": "number"
-          },
-          "weightmetric": {
-            "type": "string",
-            "example": "Kg"
-          },
-          "from": {
-            "type": "string"
-          },
-          "to": {
-            "type": "string"
-          }
-        },
-        "xml": {
-          "name": "Parcel"
-        }
+    {
+      "name": "parcel",
+      "description": "Everything about Parcel delivery orders",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
       }
     }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Login a user",
+        "description": "",
+        "operationId": "loginUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create a user account.",
+        "description": "",
+        "operationId": "createUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserSignUp"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/parcels": {
+      "post": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Create a parcel delivery order",
+        "description": "",
+        "operationId": "createParcel",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Authorization Token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Parcel object that needs to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateParcel"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Fetch all parcel delivery orders",
+        "description": "",
+        "operationId": "fetchParcels",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/parcels/{parcelId}": {
+      "get": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Fetch a specific delivery order",
+        "description": "",
+        "operationId": "findSpecificParcel",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization Token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "parcelId",
+            "in": "path",
+            "description": "Fetch parcel py Id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/users/{userId}/parcels": {
+      "get": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Find Parcels by user",
+        "description": "Fetch all parcel delivery order by a specific user.  ",
+        "operationId": "findParcelByUser",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Authorization Token"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/parcels/{parcelId}/cancel": {
+      "patch": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Cancel a specific order",
+        "description": "",
+        "operationId": "cancelOrder",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string",
+            "description": "Authorization Token"
+          },
+          {
+            "name": "parcelId",
+            "in": "path",
+            "description": "Parcel id to cancel",
+            "required": true,
+            "type": "integer",
+            "format": "integer"
+          }
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/parcels/{parcelId}/destination": {
+      "patch": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Change the destination of a specific parcel delivery order",
+        "description": "Change the destination of a specific parcel delivery order. Only the user who created the parcel should be able to change the destination of the parcel. A parcel’s destination can only be changed if it is yet to be delivered.",
+        "operationId": "changeOrderDestination",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Authorization Token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "parcelId",
+            "description": "Parcel Id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Order destination",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderDestination"
+            }
+          }
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/parcels/{parcelId}/currentlocation": {
+      "patch": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Change the present location of a specific parcel delivery order.",
+        "description": "Change the present location of a specific parcel delivery order. Only the Admin is allowed to access this endpoint.",
+        "operationId": "changeCurentLocation",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization Token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "parcelId",
+            "description": "Parcel Id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Order Status",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderCurrentlocation"
+            }
+          }
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/parcels/{parcelId}/status": {
+      "patch": {
+        "tags": [
+          "parcel"
+        ],
+        "summary": "Change the status of a specific parcel delivery order.",
+        "description": "Change the status of a specific parcel delivery order. Only the Admin is allowed to \naccess this endpoint. \n",
+        "operationId": "ChangeOrderStatus",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "UnAuthorized"
+          }
+        },
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization Token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "parcelId",
+            "in": "path",
+            "description": "Parcel Id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Order Status",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderStatus"
+            }
+          }
+        ],
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "username": {
+          "type": "string"
+        },
+        "othernames": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "registered": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "isadmin": {
+          "type": "boolean"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserSignUp": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "othernames": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "isadmin": {
+          "type": "boolean"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Parcel": {
+      "type": "object",
+      "required": [
+        "placedby",
+        "weight",
+        "weightmetric",
+        "to",
+        "from"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "weight": {
+          "type": "number"
+        },
+        "weightmetric": {
+          "type": "string",
+          "example": "Kg"
+        },
+        "sentOn": {
+          "type": "string"
+        },
+        "deliveredOn": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "currentlocation": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Parcel status in the store",
+          "enum": [
+            "placed",
+            "transiting",
+            "delivered"
+          ]
+        },
+        "isCanceled": {
+          "type": "boolean"
+        },
+        "placedby": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "xml": {
+        "name": "Parcel"
+      }
+    },
+    "CreateParcel": {
+      "type": "object",
+      "required": [
+        "placedby",
+        "weight",
+        "weightmetric",
+        "to",
+        "from"
+      ],
+      "properties": {
+        "weight": {
+          "type": "number"
+        },
+        "weightmetric": {
+          "type": "string",
+          "example": "Kg"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "placedby": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "xml": {
+        "name": "Parcel"
+      }
+    },
+    "OrderDestination": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Parcel Destination"
+      }
+    },
+    "OrderStatus": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "Parcel status in the store",
+          "enum": [
+            "placed",
+            "transiting",
+            "delivered"
+          ]
+        }
+      },
+      "xml": {
+        "name": "Parcel Destination"
+      }
+    },
+    "OrderCurrentlocation": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "currentlocation": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Parcel Current Location"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "token": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT Authorization Token"
+    }
   }
+}

@@ -99,6 +99,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
     #         )
     #     response = self.client.patch(
     #         'api/v1/parcels/1/destination',
+    #         headers={'Authorization': self.token},
     #         content_type='application/json',
     #         data=json.dumps(destination)
     #     )
@@ -110,6 +111,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
     #         )
     #     response = self.client.patch(
     #         'api/v1/parcels/1/destination',
+    #         headers={'Authorization': self.token},
     #         content_type='application/json',
     #         data=json.dumps(destination)
     #     )
@@ -134,14 +136,14 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
 
 
     def test_change_order_current_location_notadmin(self):
-        status = dict(
+        location = dict(
             userid="100",
-            status="PLACED"
+            currentlocation="Ntinda"
         )
         response = self.client.patch(
             'api/v1/parcels/87/currentlocation',
             headers={'Authorization': self.token},
             content_type='application/json',
-            data=json.dumps(status)
+            data=json.dumps(location)
         )
         self.assertEqual(response.status_code, 401)

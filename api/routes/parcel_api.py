@@ -173,7 +173,7 @@ def change_destination_parcel_delivery_order(parcelId):
             'error' : 'Order not found'
         }), 404
     errors = {}
-    if not data.get('to').trim():
+    if not data.get('to'):
         errors.update({'to':'Destination can not be null'})
     if check_is_delivered(parcelId):
         errors.update({'parcelId':'Order already delivered can not be canceled'})

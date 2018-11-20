@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
+SWAGGER_URL = '/api/v1/docs'  # URL for exposing Swagger UI (without trailing '/')
 API_URL = '/v1/swagger.json'  
 # Call factory function to create our blueprint
 swaggerui_blueprint = get_swaggerui_blueprint(
