@@ -41,6 +41,9 @@ class BaseTestCase(unittest.TestCase):
             password = self.default_password
         )
 
+        """
+        Create default user and get auth token
+        """
         self.client.post(
             self.default_signup_endpoint,
             content_type='application/json',
@@ -49,6 +52,24 @@ class BaseTestCase(unittest.TestCase):
         response = self.client.post(self.default_login_endpoint, json=self.user)
         data = response.get_json(force=True).get('data')
         self.token = data[0].get('token')
+
+        """
+        Create deafault order
+        """
+        order = dict(
+                placedby="1",
+                weight="4",
+                weightmetric="Kg",
+                senton= "2018-11-13 02:05:13.344624+03",
+                to="ntinda",
+            )
+        order['from'] ="Nitnda"
+        response = self.client.post(
+            'api/v1/parcels',
+            headers={'Authorization': self.token},
+            content_type='application/json',
+            data=json.dumps(order)
+        )
 
     def tearDown(self):
         pass
