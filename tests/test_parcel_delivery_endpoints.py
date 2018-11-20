@@ -93,29 +93,31 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         response = self.client.patch('api/v1/parcels/0/destination',headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 400)
 
-    # def test_change_destination(self):
-    #     destination = dict(
-    #             to="Kasese"
-    #         )
-    #     response = self.client.patch(
-    #         'api/v1/parcels/1/destination',
-    #         headers={'Authorization': self.token},
-    #         content_type='application/json',
-    #         data=json.dumps(destination)
-    #     )
-    #     self.assertEqual(response.status_code, 200)
+    def test_change_destination(self):
+        response = self.client.patch(
+            'api/v1/parcels/1/destination',
+            headers={'Authorization': self.token},
+            content_type='application/json',
+            data=json.dumps({"to":"Kasese"})
+        )
+        self.assertEqual(response.status_code, 200)
 
-    # def test_change_destination_with_empty(self):
-    #     destination = dict(
-    #             to=""
-    #         )
-    #     response = self.client.patch(
-    #         'api/v1/parcels/1/destination',
-    #         headers={'Authorization': self.token},
-    #         content_type='application/json',
-    #         data=json.dumps(destination)
-    #     )
-    #     self.assertEqual(response.status_code, 400)
+    def test_change_destination_with_empty(self):
+        response = self.client.patch(
+            'api/v1/parcels/1/destination',
+            headers={'Authorization': self.token},
+            content_type='application/json',
+            data=json.dumps({"to":""})
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_change_destination_with_no_header(self):
+        response = self.client.patch(
+            'api/v1/parcels/1/destination',
+            content_type='application/json',
+            data=json.dumps({"to":""})
+        )
+        self.assertEqual(response.status_code, 401)
 
     def test_change_order_status_with_empty(self):
         response = self.client.patch('api/v1/parcels/4/status',headers={'Authorization': self.token})
