@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SendIT - Create Parcel Delivery Order</title>
+	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
+	<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+<div>
+    <p class="blue-text centered sendit-title">
+        Create Parcel Delivery Order
+    </p>
+</div>
+
+
+
+    <div id="parcel-form">
+    <h2>Order delivery details</h2>
+        <form action="">
+            <div id="location-details">
+                    <span class="bold">Pickup Location: </span>
+                    <input id="start" type="text">
+                    
+                    <Span class="bold">Destination: </Span>
+                    <input id="end" type="text">
+                    <span class="bold">Estimated distance: </span><span id="distance">.....</span>
+                    <span class="bold">Estimated duration: </span><span id="duration">.....</span>
+                </div>
+                
+                <div id="weight-details">
+                    <span class="bold">Weight: </span>
+                    <input class="small-input" id="weight" type="number">&nbsp;&nbsp;
+                    <span class="bold">Weight Metric: </span>
+                    <select class="small-input" name="weightmetric" id="weightmetric">
+                        <option value="Kg">Kg</option>
+                        <option value="Kg">g</option>
+                        <option value="Kg">lbs</option>
+                    </select>
+                </div>
+                <button class="btn-blue" type='submit'>Place Delivery Order</button>
+        </form>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="static/js/google-maps.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI-I8TwqaI7soaw0o5pG2iGHtJCzXVGRM&libraries=places&callback=initMap">
+    </script>
+    <script src="static/js/main.js"></script>
+  </body>
+</html>

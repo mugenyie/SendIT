@@ -37,6 +37,11 @@ body{
   color: #107895;
   font-weight: 600;
 }
+.bold{font-weight: bold;}
+.sendit-title{
+  font-size: 35px;
+  border-bottom: 1px solid rgba(16, 120, 149, 0.15);
+}
 /* login page */
 .goin-btn{
   padding-top: 10px;
@@ -46,9 +51,11 @@ body{
 }
 form {
   margin:0 auto;
+}
+.sendit-form form{
   width:300px
 }
-input {
+input, select {
   border-radius: 4px;
   margin-bottom:3px;
   padding:10px;
@@ -86,4 +93,40 @@ label {
 }
 #form-switch:checked~#login-form {
   display:none
+}
+
+/* Google maps */
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 20px 20px;
+}
+.home-content{
+  padding-right: 20px;
+  padding-left: 20px;
+}
+#parcel-form{
+  float: left;
+  width: 30%;
+  margin-right: 20px;
+}
+#map {
+  height: 100%;
+  float: right;
+  width: 60%;
+  height: 100%;
+}
+
+#weight-details, #location-details{
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.small-input{
+  width: 80px;
 }
