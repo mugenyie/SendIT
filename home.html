@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SendIT - Create Parcel Delivery Order</title>
+	<title>SendIT - Order History</title>
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
 	<link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
+    <div class="top-bar">
+        <a class="right" href="#"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
+        <a class="right" href="orderhistory.html"><img src="static/images/box-on-hand.png" alt=""> Order History</a>
+    </div>
 <div>
     <p class="blue-text centered sendit-title">
         Create Parcel Delivery Order
@@ -24,6 +28,7 @@
                     <Span class="bold">Destination: </Span>
                     <input id="end" type="text">
                     <span class="bold">Estimated distance: </span><span id="distance">.....</span>
+                    <br />
                     <span class="bold">Estimated duration: </span><span id="duration">.....</span>
                 </div>
                 
@@ -33,8 +38,8 @@
                     <span class="bold">Weight Metric: </span>
                     <select class="small-input" name="weightmetric" id="weightmetric">
                         <option value="Kg">Kg</option>
-                        <option value="Kg">g</option>
-                        <option value="Kg">lbs</option>
+                        <option value="g">g</option>
+                        <option value="lb">lb</option>
                     </select>
                 </div>
                 <button class="btn-blue" type='submit'>Place Delivery Order</button>
