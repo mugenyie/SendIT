@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SendIT - Create Parcel Delivery Order</title>
+	<title>SendIT - Order History</title>
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
 	<link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
     <div class="top-bar">
-        <a class="right" href="#"><img src="static/images/power-button-outline.png" alt=""> LogOut</a>
-        <a class="right" href="#"><img src="static/images/box-on-hand.png" alt=""> View Parcel Orders</a>
+        <a class="left" href="."><img src="static/images/home-icon.png" alt=""> Home</a>
+        <a class="right" href="#"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
+        <a class="right" href="orderhistory.html"><img src="static/images/box-on-hand.png" alt=""> Order History</a>
     </div>
-<div>
-    <p class="blue-text centered sendit-title">
-        Order History
-    </p>
-</div>
+    <div>
+        <p class="blue-text centered sendit-title">
+            Order History
+        </p>
+    </div>
 
-
+    <table class="centered">
+        <tr>
+            <th>Order No.</th><th>Date Made</th><th>Status</th><th>Current Location</th>
+        </tr>
+        <tr>
+            <td>Order No.</td><td>Date Made</td><td>Status</td><td>Current Location</td>
+        </tr>
+        <tr>
+            <td>Order No.</td><td>Date Made</td><td>Status</td><td>Current Location</td>
+        </tr>
+    </table>
 
 
 
 
     <script src="static/js/main.js"></script>
-  </body>
+</body>
 </html>
