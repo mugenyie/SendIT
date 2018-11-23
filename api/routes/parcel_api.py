@@ -37,6 +37,7 @@ def create_parcel_delivery_order():
             'status': 400,
             'error' : errors
         }), 400
+    data['senton'] = datetime.datetime.now()
     try:
         parcel = Parcel(data).creat_parcel_delivery_order()
         return jsonify({
