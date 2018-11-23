@@ -1,6 +1,7 @@
 function createOrder(){
     event.preventDefault();
 
+    let placedby = getCookie("token");
     let from = document.getElementById('start').value;
     let to = document.getElementById('end').value;
     let weight = document.getElementById('weight').value;
@@ -16,13 +17,19 @@ function createOrder(){
             to:to,
             weight:weight,
             weightmetric:weightmetric,
-            placedby:getCookie('token')
+            placedby:placedby
         })
     }).then((res) => res.json())
     .then(
         function (data){
-            document.getElementById("order-success").textContent="Delivery Order Received"
-            console.log(data)
+            if(data.error != null){
+                document.getElementById("order-error").textContent=data.error;
+            }else{
+                document.getElementById("order-success").textContent="Delivery Order Received";
+            }
+            
+            console.log(data),
+            document.getElementById("spinner").style.display = 'none'
         }
         )
     .catch(function(err){
