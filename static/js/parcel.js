@@ -1,3 +1,19 @@
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 function createOrder(){
     event.preventDefault();
 
@@ -40,19 +56,29 @@ function createOrder(){
     });
 }
 
+function get_user_orders(){
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+    let userid = getCookie("id");
+
+    fetch('https://sendit-api-columbus.herokuapp.com/api/v1/users/'+userid+'/parcels', {
+        method: 'GET',
+        headers : {
+            "Authorization":getCookie("token")
         }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+    }).then((res) => res.json())
+    .then(function(data) {
+        data.id.forEach(element => {
+            order_list += `
+            <tr>
+                <td>${element.id}</td><td>${element.from}</td><td>${element.to}</td>
+            </tr>
+            `
+        });
+        console.log(data);
+        var div = document.getElementById('orders');
+        div.innerHTML = order_list;
+    })
+    .catch(function(error) {
+        console.log(error);
+    }); 
 }

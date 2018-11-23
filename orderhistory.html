@@ -3,9 +3,10 @@
 <head>
 	<title>SendIT - Order History</title>
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
-	<link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="static/js/auth.js"></script>
 </head>
-<body>
+<body onload="get_user_orders();">
     <div class="top-bar">
         <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
         <a class="right" href="#"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
@@ -17,7 +18,10 @@
         </p>
     </div>
 
-    <table class="centered">
+    <div id="orders">
+
+    </div>
+    <!-- <table class="centered">
         <tr>
             <th>Order No.</th><th>Date Made</th><th>Status</th><th>Current Location</th>
         </tr>
@@ -27,11 +31,11 @@
         <tr>
             <td>Order No.</td><td>Date Made</td><td>Status</td><td>Current Location</td>
         </tr>
-    </table>
+    </table> -->
 
 
 
 
-    <script src="static/js/main.js"></script>
+    <script src="static/js/parcel.js"></script>
 </body>
 </html>
