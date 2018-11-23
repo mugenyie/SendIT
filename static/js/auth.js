@@ -34,27 +34,50 @@ function postLoginData(){
     });
 }
 
-function postRegisterData(event){
+function postRegisterationData(){
     event.preventDefault();
 
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
+    let username = document.getElementById('r-username').value;
+    let email = document.getElementById('email').value;
+    let firstname = document.getElementById('firstname').value;
+    let lastname = document.getElementById('lastname').value;
+    let othernames = document.getElementById('othernames').value;
+    let password = document.getElementById('r-password').value;
 
-    fetch('https://sendit-api-columbus.herokuapp.com/api/v1/auth/login', {
+    document.getElementById("spinner").style.display = 'flex'
+    
+    fetch('https://sendit-api-columbus.herokuapp.com/api/v1/auth/signup', {
         method: 'POST',
         headers : new Headers(),
         body:JSON.stringify({
             username:username, 
+            email:email,
+            firstname:firstname,
+            lastname:lastname,
+            othernames:othernames,
             password:password
         })
     }).then((res) => res.json())
     .then(
-        // setCookie('user', data.),
-        (data) =>  console.log(data)
+        function (data){
+            setCookie('token', data.data[0].token, 30)
+            setCookie('username', data.data[0].user.username, 30),
+            setCookie('email', data.data[0].user.email, 30),
+            setCookie('firstname', data.data[0].user.firstname, 30),
+            setCookie('lastname', data.data[0].user.lastname, 30),
+            setCookie('othernames', data.data[0].user.othernames, 30),
+            setCookie('isadmin', data.data[0].user.isadmin, 30)
+            document.getElementById("spinner").style.display = 'none'
+            window.location.href = "home.html"
+            console.log(data)
+        }
         )
-    .catch((err)=>console.log(err))
+    .catch(function(err){
+        console.log(err)
+        document.getElementById("spinner").style.display = 'none'
+        document.getElementById("login-notice").textContent="Username or email already registered !!"
+    });
 }
-
 
 function setCookie(cname,cvalue,exmins) {
     var d = new Date();
@@ -84,6 +107,8 @@ function checkToken() {
     if (token == "") {
         alert("Login to continue")
         window.location.replace('index.html');
+    }else{
+        document.getElementById("username").textContent=getCookie('username');
     }
 }
 

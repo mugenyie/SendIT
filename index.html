@@ -4,7 +4,7 @@
 	<title>SendIT</title>
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
 	<link rel="stylesheet" href="static/css/style.css">
-	<script src="static/js/main.js"></script>
+	<script src="static/js/auth.js"></script>
 </head>
 <body class="landing-bg">
 <div class="front-branding">
@@ -25,14 +25,17 @@
 				<label class="white-element" for='form-switch'><span>Register</span></label>
 		</div>
 	</form>
-	<form id='register-form' action="" method='post'>
-		<input type="text" placeholder="Username" required>
-		<input type="email" placeholder="Email" required>
-		<input type="password" placeholder="Password" required>
+	<form id='register-form' onsubmit="postRegisterationData()">
+		<input id="r-username" type="text" placeholder="Username" required>
+		<input id="email" type="email" placeholder="Email" required>
+		<input id="firstname" type="text" placeholder="Firstname" required>
+		<input id="lastname" type="text" placeholder="Lastname" required>
+		<input id="othernames" type="text" placeholder="Othernames">
+		<input id="r-password" type="password" placeholder="Password" required>
 		<input type="password" placeholder="Re Password" required>
 		<div class="goin-btn">
-				<button class="btn-blue" type='submit'>Register</button>
-				<label class="white-element" for='form-switch'>Already Member ? Sign In Now..</label>
+			<button class="btn-blue" type='submit'>Register</button>
+			<label class="white-element" for='form-switch'>Already Member ? Sign In Now..</label>
 		</div>
 	</form>
 	<div class="centered" id="spinner">
