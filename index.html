@@ -4,6 +4,7 @@
 	<title>SendIT</title>
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
 	<link rel="stylesheet" href="static/css/style.css">
+	<script src="static/js/main.js"></script>
 </head>
 <body class="landing-bg">
 <div class="front-branding">
@@ -15,9 +16,9 @@
 <p class="centered"><span class="bold">Sample User:</span> (user, 12345)&nbsp;&nbsp;<span class="bold">Sample Admin:</span> (admin, 12345)</p>
 <div class="sendit-form">
 	<input type='checkbox' id='form-switch'>
-	<form id='login-form' action="" method='post'>
-		<input type="text" placeholder="Username" required>
-		<input type="password" placeholder="Password" required>
+	<form onsubmit="postLoginData()">
+		<input id="username" type="text" placeholder="Username" required>
+		<input id="password" type="password" placeholder="Password" required>
 		<div class="goin-btn">
 				<button class="btn-blue" type='submit'>Login</button>
 				<label class="white-element" for='form-switch'><span>Register</span></label>
@@ -37,6 +38,5 @@
 <footer class="centered">
 	<p>Design and Production by <a href="mailto:ecmugenyi@gmail.com?Subject=Message%20from%20SendIT">Emmanuel Columbus Mugenyi</a></p>
 </footer>
-	<script src="static/js/main.js"></script>
 </body>
 </html>

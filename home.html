@@ -3,13 +3,15 @@
 <head>
 	<title>SendIT - Create Parcel Delivery Order</title>
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
-	<link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="static/js/main.js"></script>
 </head>
-<body>
+<body onload="checkToken()">
     <div class="top-bar">
-        <a class="left" href="."><img src="static/images/home-icon.png" alt=""> Home</a>
+        <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
         <a class="right" href="#"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
         <a class="right" href="orderhistory.html"><img src="static/images/box-on-hand.png" alt=""> Order History</a>
+        <a class="right"><span id="username"> <img src="static/images/user.png"> </span></a>
     </div>
 <div>
     <p class="blue-text centered sendit-title">
@@ -53,6 +55,6 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCI-I8TwqaI7soaw0o5pG2iGHtJCzXVGRM&libraries=places&callback=initMap">
     </script>
-    <script src="static/js/main.js"></script>
+    <script src="static/js/parcel.js"></script>
   </body>
 </html>
