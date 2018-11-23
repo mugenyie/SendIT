@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="static/css/style.css">
     <script src="static/js/auth.js"></script>
 </head>
-<body onload="checkToken()">
+<body onload="">
     <div class="top-bar">
         <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
         <a class="right" href="javascript:logOut()"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
@@ -22,31 +22,37 @@
 
 
     <div id="parcel-form">
+        <h2 class="error" id="order-error"></h2>
+        <h2 class="success" id="order-success"></h2>
     <h2>Order delivery details</h2>
-        <form action="">
+        <form id="create-order" onsubmit="createOrder()">
             <div id="location-details">
-                    <span class="bold">Pickup Location: </span>
-                    <input id="start" type="text">
-                    
-                    <Span class="bold">Destination: </Span>
-                    <input id="end" type="text">
-                    <span class="bold">Estimated distance: </span><span id="distance">.....</span>
-                    <br />
-                    <span class="bold">Estimated duration: </span><span id="duration">.....</span>
-                </div>
+                <span class="bold">Pickup Location: </span>
+                <input id="start" type="text">
                 
-                <div id="weight-details">
-                    <span class="bold">Weight: </span>
-                    <input class="small-input" id="weight" type="number">&nbsp;&nbsp;
-                    <span class="bold">Weight Metric: </span>
-                    <select class="small-input" name="weightmetric" id="weightmetric">
-                        <option value="Kg">Kg</option>
-                        <option value="g">g</option>
-                        <option value="lb">lb</option>
-                    </select>
-                </div>
-                <button class="btn-blue" type='submit'>Place Delivery Order</button>
+                <Span class="bold">Destination: </Span>
+
+                <input id="end" type="text">
+                <span class="bold">Estimated distance: </span><span id="distance">.....</span>
+                <br />
+                <span class="bold">Estimated duration: </span><span id="duration">.....</span>
+            </div>
+            
+            <div id="weight-details">
+                <span class="bold">Weight: </span>
+                <input class="small-input" id="weight" type="number">&nbsp;&nbsp;
+                <span class="bold">Weight Metric: </span>
+                <select class="small-input" id="weightmetric">
+                    <option value="Kg">Kg</option>
+                    <option value="g">g</option>
+                    <option value="lb">lb</option>
+                </select>
+            </div>
+            <button class="btn-blue" type='submit'>Place Delivery Order</button>
         </form>
+        <div class="centered" id="spinner">
+            <img src="static/images/spinner.gif" alt="">
+        </div>
     </div>
 
     <div id="map"></div>

@@ -13,24 +13,22 @@ function postLoginData(){
             username:username, 
             password:password
         })
-    }).then((res) => res.json())
-    .then(
-        function (data){
-            setCookie('token', data.data[0].token, 30)
-            setCookie('username', data.data[0].user.username, 30),
-            setCookie('email', data.data[0].user.email, 30),
-            setCookie('firstname', data.data[0].user.firstname, 30),
-            setCookie('lastname', data.data[0].user.lastname, 30),
-            setCookie('othernames', data.data[0].user.othernames, 30),
-            setCookie('isadmin', data.data[0].user.isadmin, 30)
-            document.getElementById("spinner").style.display = 'none'
-            window.location.href = "home.html"
-        }
-        )
-    .catch(function(err){
-        console.log(err)
-        document.getElementById("spinner").style.display = 'none'
-        document.getElementById("login-notice").textContent="Wrong username or password !!"
+    }).then(response => response.json())
+    .then(data => {
+            setCookie('token', data.data[0].token, 30);
+            setCookie('username', data.data[0].user.username, 30);
+            setCookie('email', data.data[0].user.email, 30);
+            setCookie('firstname', data.data[0].user.firstname, 30);
+            setCookie('lastname', data.data[0].user.lastname, 30);
+            setCookie('othernames', data.data[0].user.othernames, 30);
+            setCookie('isadmin', data.data[0].user.isadmin, 30);
+            document.getElementById("spinner").style.display = 'none';
+            window.location.href = "home.html";
+        })
+    .catch(err => {
+        console.log(err);
+        document.getElementById("spinner").style.display = 'none';
+        document.getElementById("login-notice").textContent="Wrong username or password !!";
     });
 }
 
@@ -60,7 +58,8 @@ function postRegisterationData(){
     }).then((res) => res.json())
     .then(
         function (data){
-            setCookie('token', data.data[0].token, 30)
+            setCookie('token', data.data[0].token, 30),
+            setCookie('id', data.data[0].id, 30),
             setCookie('username', data.data[0].user.username, 30),
             setCookie('email', data.data[0].user.email, 30),
             setCookie('firstname', data.data[0].user.firstname, 30),
@@ -105,7 +104,6 @@ function getCookie(cname) {
 function checkToken() {
     var token=getCookie("token");
     if (token == "") {
-        alert("Login to continue")
         window.location.replace('index.html');
     }else{
         document.getElementById("username").textContent=getCookie('username');

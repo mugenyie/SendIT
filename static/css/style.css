@@ -127,6 +127,11 @@ label {
   color: red;
   font-weight: 600;
 }
+.success{
+  font-size: 16px;
+  color: #318cd4;
+  font-weight: 600;
+}
 /* Google maps */
 
 html, body {
