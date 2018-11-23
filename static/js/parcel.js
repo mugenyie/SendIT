@@ -29,14 +29,14 @@ function createOrder(){
             }else{
                 document.getElementById("order-success").textContent="Delivery Order Received";
             }
-            console.log(getCookie("id"))
-            console.log(getCookie("token"))
             console.log(data)
             document.getElementById("spinner").style.display = 'none'
         }
         )
     .catch(function(err){
         console.log(err)
+        console.log(getCookie("id"))
+        console.log(getCookie("token"))
         document.getElementById("spinner").style.display = 'none'
         document.getElementById("order-error").textContent="An error occured, please try again"
     });
