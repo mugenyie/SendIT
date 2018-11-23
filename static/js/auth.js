@@ -16,6 +16,7 @@ function postLoginData(){
     }).then(response => response.json())
     .then(data => {
             setCookie('token', data.data[0].token, 30);
+            setCookie('id', data.data[0].user.id, 30);
             setCookie('username', data.data[0].user.username, 30);
             setCookie('email', data.data[0].user.email, 30);
             setCookie('firstname', data.data[0].user.firstname, 30);
@@ -58,6 +59,7 @@ function postRegisterationData(){
     }).then((res) => res.json())
     .then(data => {
         setCookie('token', data.data[0].token, 30);
+        setCookie('id', data.data[0].user.id, 30);
         setCookie('username', data.data[0].user.username, 30);
         setCookie('email', data.data[0].user.email, 30);
         setCookie('firstname', data.data[0].user.firstname, 30);

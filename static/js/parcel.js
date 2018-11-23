@@ -35,8 +35,6 @@ function createOrder(){
         )
     .catch(function(err){
         console.log(err)
-        console.log(getCookie("id"))
-        console.log(getCookie("token"))
         document.getElementById("spinner").style.display = 'none'
         document.getElementById("order-error").textContent="An error occured, please try again"
     });
