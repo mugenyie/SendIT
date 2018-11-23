@@ -29,8 +29,9 @@ function createOrder(){
             }else{
                 document.getElementById("order-success").textContent="Delivery Order Received";
             }
-            
-            console.log(data),
+            console.log(getCookie("id"))
+            console.log(getCookie("token"))
+            console.log(data)
             document.getElementById("spinner").style.display = 'none'
         }
         )
