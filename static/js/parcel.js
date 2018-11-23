@@ -1,4 +1,4 @@
-function createOrder(placedby){
+function createOrder(){
     event.preventDefault();
 
     let placedby = getCookie("id");
