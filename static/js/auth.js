@@ -128,7 +128,7 @@ function logOut()
         var name=cookiename;
         //alert(name);
         var value="";
-        document.cookie = name + "=" + value + expires + "; path=/acc/html";                    
+        document.cookie = name + "=" + value + expires + ";path=/";                    
     }
     window.location = "index.html"; 
 }
