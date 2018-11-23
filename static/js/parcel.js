@@ -16,7 +16,7 @@ function createOrder(){
             to:to,
             weight:weight,
             weightmetric:weightmetric,
-            placedby:1
+            placedby:getCookie('token')
         })
     }).then((res) => res.json())
     .then(
