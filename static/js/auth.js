@@ -58,17 +58,23 @@ function postRegisterationData(){
     }).then((res) => res.json())
     .then(
         function (data){
-            setCookie('token', data.data[0].token, 30),
-            setCookie('id', data.data[0].id, 30),
-            setCookie('username', data.data[0].user.username, 30),
-            setCookie('email', data.data[0].user.email, 30),
-            setCookie('firstname', data.data[0].user.firstname, 30),
-            setCookie('lastname', data.data[0].user.lastname, 30),
-            setCookie('othernames', data.data[0].user.othernames, 30),
-            setCookie('isadmin', data.data[0].user.isadmin, 30)
-            document.getElementById("spinner").style.display = 'none'
-            window.location.href = "home.html"
+            if(data.error != null){
+                document.getElementById("order-error").textContent=data.error;
+            }else{
+                document.getElementById("order-success").textContent="Delivery Order Received";
+                setCookie('token', data.data[0].token, 30),
+                setCookie('id', data.data[0].id, 30),
+                setCookie('username', data.data[0].user.username, 30),
+                setCookie('email', data.data[0].user.email, 30),
+                setCookie('firstname', data.data[0].user.firstname, 30),
+                setCookie('lastname', data.data[0].user.lastname, 30),
+                setCookie('othernames', data.data[0].user.othernames, 30),
+                setCookie('isadmin', data.data[0].user.isadmin, 30)
+                window.location.href = "home.html"
+            }
+            
             console.log(data)
+            document.getElementById("spinner").style.display = 'none'
         }
         )
     .catch(function(err){

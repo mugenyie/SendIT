@@ -1,7 +1,7 @@
-function createOrder(){
+function createOrder(placedby){
     event.preventDefault();
 
-    let placedby = getCookie("token");
+    let placedby = getCookie("id");
     let from = document.getElementById('start').value;
     let to = document.getElementById('end').value;
     let weight = document.getElementById('weight').value;
@@ -11,7 +11,9 @@ function createOrder(){
     
     fetch('https://sendit-api-columbus.herokuapp.com/api/v1/parcels', {
         method: 'POST',
-        headers : new Headers(),
+        headers : {
+            "Authorization":getCookie("token")
+        },
         body:JSON.stringify({
             from:from, 
             to:to,
