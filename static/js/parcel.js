@@ -67,7 +67,7 @@ function get_user_orders(){
         }
     }).then((res) => res.json())
     .then(function(data) {
-        data.id.forEach(element => {
+        data.data.forEach(element => {
             order_list += `
             <tr>
                 <td>${element.id}</td><td>${element.from}</td><td>${element.to}</td>
