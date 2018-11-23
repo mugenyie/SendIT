@@ -28,11 +28,11 @@
         <form id="create-order" onsubmit="createOrder()">
             <div id="location-details">
                 <span class="bold">Pickup Location: </span>
-                <input id="start" type="text">
+                <input id="start" type="text" required>
                 
                 <Span class="bold">Destination: </Span>
 
-                <input id="end" type="text">
+                <input id="end" type="text" required>
                 <span class="bold">Estimated distance: </span><span id="distance">.....</span>
                 <br />
                 <span class="bold">Estimated duration: </span><span id="duration">.....</span>
@@ -40,7 +40,7 @@
             
             <div id="weight-details">
                 <span class="bold">Weight: </span>
-                <input class="small-input" id="weight" type="number">&nbsp;&nbsp;
+                <input class="small-input" id="weight" type="number" required>&nbsp;&nbsp;
                 <span class="bold">Weight Metric: </span>
                 <select class="small-input" id="weightmetric">
                     <option value="Kg">Kg</option>
