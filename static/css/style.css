@@ -9,9 +9,6 @@ a{
   font-weight: 600;
   color:#318cd4;
 }
-.landing-bg{
-  /* background:#2ca2f1; */
-}
 .landing-description{
   font-size: 16px;
 }
@@ -115,12 +112,21 @@ label {
   display:none
 }
 #form-switch:checked~#register-form {
-  display:block
+  display:block !important;
 }
 #form-switch:checked~#login-form {
-  display:none
+  display:none !important;
 }
-
+#spinner{
+  margin-top: -200px;
+  z-index: 10;
+  display: none;
+}
+.error{
+  font-size: 16px;
+  color: red;
+  font-weight: 600;
+}
 /* Google maps */
 
 html, body {

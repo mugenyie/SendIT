@@ -15,8 +15,9 @@
 </div>
 <p class="centered"><span class="bold">Sample User:</span> (user, 12345)&nbsp;&nbsp;<span class="bold">Sample Admin:</span> (admin, 12345)</p>
 <div class="sendit-form">
+	<span class="error centered" id="login-notice"></span>
 	<input type='checkbox' id='form-switch'>
-	<form onsubmit="postLoginData()">
+	<form id='login-form' onsubmit="postLoginData()">
 		<input id="username" type="text" placeholder="Username" required>
 		<input id="password" type="password" placeholder="Password" required>
 		<div class="goin-btn">
@@ -34,6 +35,9 @@
 				<label class="white-element" for='form-switch'>Already Member ? Sign In Now..</label>
 		</div>
 	</form>
+	<div class="centered" id="spinner">
+		<img src="static/images/spinner.gif" alt="">
+	</div>
 </div>
 <footer class="centered">
 	<p>Design and Production by <a href="mailto:ecmugenyi@gmail.com?Subject=Message%20from%20SendIT">Emmanuel Columbus Mugenyi</a></p>
