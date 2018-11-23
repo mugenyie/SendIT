@@ -59,7 +59,7 @@ function createOrder(){
 function get_user_orders(){
 
     let userid = getCookie("id");
-
+    let order_list = "";
     fetch('https://sendit-api-columbus.herokuapp.com/api/v1/users/'+userid+'/parcels', {
         method: 'GET',
         headers : {
