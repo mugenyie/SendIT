@@ -9,8 +9,9 @@
 <body onload="checkToken();get_user_orders();">
     <div class="top-bar">
         <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
-        <a class="right" href="#"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
+        <a class="right" href="javascript:logOut()"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
         <a class="right" href="orderhistory.html"><img src="static/images/box-on-hand.png" alt=""> Order History</a>
+        <a class="right"><img src="static/images/user.png"> <span id="username"></span></a>
     </div>
     <div>
         <p class="blue-text centered sendit-title">
@@ -18,20 +19,13 @@
         </p>
     </div>
 
-    <div id="orders">
+    <!-- <div id="orders">
 
-    </div>
-    <!-- <table class="centered">
-        <tr>
-            <th>Order No.</th><th>Date Made</th><th>Status</th><th>Current Location</th>
-        </tr>
-        <tr>
-            <td>Order No.</td><td>Date Made</td><td>Status</td><td>Current Location</td>
-        </tr>
-        <tr>
-            <td>Order No.</td><td>Date Made</td><td>Status</td><td>Current Location</td>
-        </tr>
-    </table> -->
+    </div> -->
+    
+    <table id="orders" class="centered">
+       
+    </table>
 
 
 

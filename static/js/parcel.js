@@ -44,6 +44,7 @@ function createOrder(){
                 document.getElementById("order-error").textContent=data.error;
             }else{
                 document.getElementById("order-success").textContent="Delivery Order Received";
+                window.location = "orderhistory.html";
             }
             console.log(data)
             document.getElementById("spinner").style.display = 'none'
@@ -59,7 +60,11 @@ function createOrder(){
 function get_user_orders(){
 
     let userid = getCookie("id");
-    let order_list = "";
+    let order_list = `
+    <tr>
+        <th>Order No.</th><th>Date Made</th><th>from</th><th>to</th><th>Current Location</th><th>Status</th>
+    </tr>
+    `;
     fetch('https://sendit-api-columbus.herokuapp.com/api/v1/users/'+userid+'/parcels', {
         method: 'GET',
         headers : {
@@ -68,9 +73,13 @@ function get_user_orders(){
     }).then((res) => res.json())
     .then(function(data) {
         data.data.forEach(element => {
+            cancel_link = element.status == "DELIVERED" ? "" : "<a href=''>Cancel Delivery</a>"; //if delivered show no cancel
+            
             order_list += `
             <tr>
-                <td>${element.id}</td><td>${element.from}</td><td>${element.to}</td>
+                <td>${element.id}</td><td>${element.senton}</td><td>${element.from}</td>
+                <td>${element.to}</td><td>${element.currentlocation}</td><td>${element.status}</td>
+                <td>${cancel_link}</td>
             </tr>
             `
         });
