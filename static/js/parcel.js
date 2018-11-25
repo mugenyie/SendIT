@@ -91,3 +91,36 @@ function get_user_orders(){
         console.log(error);
     }); 
 }
+
+function get_all_orders(){
+
+    let order_list = `
+    <tr>
+        <th>Order No.</th><th>Date Made</th><th>from</th><th>to</th><th>Current Location</th><th>Status</th><th></th>
+    </tr>
+    `;
+    fetch('https://sendit-api-columbus.herokuapp.com/api/v1/parcels', {
+        method: 'GET',
+        headers : {
+            "Authorization":getCookie("token")
+        }
+    }).then((res) => res.json())
+    .then(function(data) {
+        data.data.forEach(element => {
+
+            order_list += `
+            <tr>
+                <td>${element.id}</td><td>${element.senton}</td><td>${element.from}</td>
+                <td>${element.to}</td><td>${element.currentlocation}</td><td>${element.status}</td>
+                <td><a href="#">Edit</a></td>
+            </tr>
+            `
+        });
+        console.log(data);
+        var div = document.getElementById('order-management');
+        div.innerHTML = order_list;
+    })
+    .catch(function(error) {
+        console.log(error);
+    }); 
+}

@@ -15,6 +15,9 @@ function postLoginData(){
         })
     }).then(response => response.json())
     .then(data => {
+        if(data.error != null){
+            document.getElementById("login-notice").textContent=data.error;
+        }else{
             setCookie('token', data.data[0].token, 30);
             setCookie('id', data.data[0].user.id, 30);
             setCookie('username', data.data[0].user.username, 30);
@@ -23,8 +26,13 @@ function postLoginData(){
             setCookie('lastname', data.data[0].user.lastname, 30);
             setCookie('othernames', data.data[0].user.othernames, 30);
             setCookie('isadmin', data.data[0].user.isadmin, 30);
-            document.getElementById("spinner").style.display = 'none';
-            window.location.href = "home.html";
+            if(Boolean(data.data[0].user.isAdmin) == true){
+                window.location.href = "admin.html";
+            }else{
+                window.location.href = "home.html";
+            }
+        } 
+        document.getElementById("spinner").style.display = 'none';
         })
     .catch(err => {
         console.log(err);
@@ -58,16 +66,24 @@ function postRegisterationData(){
         })
     }).then((res) => res.json())
     .then(data => {
-        setCookie('token', data.data[0].token, 30);
-        setCookie('id', data.data[0].user.id, 30);
-        setCookie('username', data.data[0].user.username, 30);
-        setCookie('email', data.data[0].user.email, 30);
-        setCookie('firstname', data.data[0].user.firstname, 30);
-        setCookie('lastname', data.data[0].user.lastname, 30);
-        setCookie('othernames', data.data[0].user.othernames, 30);
-        setCookie('isadmin', data.data[0].user.isadmin, 30);
+        if(data.error != null){
+            document.getElementById("login-notice").textContent=data.error;
+        }else{
+            setCookie('token', data.data[0].token, 30);
+            setCookie('id', data.data[0].user.id, 30);
+            setCookie('username', data.data[0].user.username, 30);
+            setCookie('email', data.data[0].user.email, 30);
+            setCookie('firstname', data.data[0].user.firstname, 30);
+            setCookie('lastname', data.data[0].user.lastname, 30);
+            setCookie('othernames', data.data[0].user.othernames, 30);
+            setCookie('isadmin', data.data[0].user.isadmin, 30);
+            if(Boolean(data.data[0].user.isAdmin) == true){
+                window.location.href = "admin.html";
+            }else{
+                window.location.href = "home.html";
+            }
+        } 
         document.getElementById("spinner").style.display = 'none';
-        window.location.href = "home.html";
     })
     .catch(err => {
         console.log(err);
@@ -127,4 +143,8 @@ function logOut()
         document.cookie = name + "=" + value + expires + ";path=/";                    
     }
     window.location = "index.html"; 
+}
+
+function isAdmin(){
+    document.getElementById('order-nav').style.display = 'none';
 }
