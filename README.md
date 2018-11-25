@@ -10,6 +10,6 @@ SendIT is a courier service that helps users deliver parcels to different destin
 
 https://sendit-api-columbus.herokuapp.com/api/v1/docs/
 
-> **[SendIT Front-End App](https://mugenyie.github.io/SendIT)**
+> **[SendIT Front-End App](https://mugenyie.github.io/SendIT/)**
 
-https://mugenyie.github.io/SendIT
+https://mugenyie.github.io/SendIT/
