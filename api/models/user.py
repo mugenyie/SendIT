@@ -18,14 +18,14 @@ class User:
 
     def create_user(self):
         insert_user_command = """
-        INSERT INTO users (firstname, lastname, othernames, email, username, registered, password) 
-        VALUES (%s,%s,%s,%s,%s,%s,%s) 
-        RETURNING id,firstname, lastname, othernames, email, username, registered, isadmin
+        INSERT INTO users (firstname, lastname, othernames, email, username, registered, password, isAdmin) 
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s) 
+        RETURNING id,firstname, lastname, othernames, email, username, registered, isAdmin
         """
         database.cursor.execute(insert_user_command, (
             self.firstname, self.lastname, 
             self.othernames, self.email, 
-            self.username, self.registered, self.password
+            self.username, self.registered, self.password, self.isAdmin
         ))
         user = database.cursor.fetchone()
         person = {}

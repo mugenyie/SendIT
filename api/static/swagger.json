@@ -13,23 +13,23 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "127.0.0.1:5000",
-  "basePath": "/api/v1/docs",
+  "host": "sendit-api-columbus.herokuapp.com",
+  "basePath": "/api/v1/",
   "tags": [
     {
       "name": "user",
       "description": "Operations about user",
       "externalDocs": {
-        "description": "Find out more about our store",
-        "url": "http://swagger.io"
+        "description": "Visit SendIT frontend App",
+        "url": "https://mugenyie.github.io/SendIT/"
       }
     },
     {
       "name": "parcel",
       "description": "Everything about Parcel delivery orders",
       "externalDocs": {
-        "description": "Find out more",
-        "url": "http://swagger.io"
+        "description": "Visit SendIT frontend App",
+        "url": "https://mugenyie.github.io/SendIT/"
       }
     }
   ],
@@ -149,6 +149,15 @@
         "produces": [
           "application/xml",
           "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "Authorization Token",
+            "required": false,
+            "type": "string"
+          }
         ],
         "responses": {
           "200": {
@@ -501,7 +510,7 @@
         "lastname": {
           "type": "string"
         },
-        "isadmin": {
+        "isAdmin": {
           "type": "boolean"
         }
       },
@@ -544,7 +553,7 @@
         "lastname": {
           "type": "string"
         },
-        "isadmin": {
+        "isAdmin": {
           "type": "boolean"
         }
       },

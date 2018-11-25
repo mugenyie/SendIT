@@ -31,6 +31,8 @@ def create_user():
             'error' : errors
         }), 400
     data['registered'] = datetime.datetime.now()
+    if not data.get('isAdmin'):
+        data['isAdmin'] = False
     try:
         user = User(data).create_user()
         if user:
