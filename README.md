@@ -13,3 +13,7 @@ https://sendit-api-columbus.herokuapp.com/api/v1/docs/
 > **[SendIT Front-End App](https://mugenyie.github.io/SendIT/)**
 
 https://mugenyie.github.io/SendIT/
+
+> **[Project on Pivotal Tracker Dashboard](https://www.pivotaltracker.com/n/projects/2224050)**
+
+https://www.pivotaltracker.com/n/projects/2224050
