@@ -125,7 +125,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
 
     def test_change_order_status_with_user_notadmin(self):
         status = dict(
-            userid="100",
+            userId="100",
             status="PLACED"
         )
         response = self.client.patch(
@@ -136,10 +136,23 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         )
         self.assertEqual(response.status_code, 401)
 
+    def test_change_order_status_admin(self):
+        status = dict(
+            userId="1",
+            status="PLACED"
+        )
+        response = self.client.patch(
+            'api/v1/parcels/1/status',
+            content_type='application/json',
+            headers={'Authorization': self.token},
+            data=json.dumps(status)
+        )
+        self.assertEqual(response.status_code, 200)
+
 
     def test_change_order_current_location_notadmin(self):
         location = dict(
-            userid="100",
+            userId="100",
             currentlocation="Ntinda"
         )
         response = self.client.patch(
@@ -149,3 +162,29 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
             data=json.dumps(location)
         )
         self.assertEqual(response.status_code, 401)
+
+    def test_change_order_current_location_empty(self):
+        location = dict(
+            userId="1",
+            currentlocation=""
+        )
+        response = self.client.patch(
+            'api/v1/parcels/1/currentlocation',
+            headers={'Authorization': self.token},
+            content_type='application/json',
+            data=json.dumps(location)
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_change_order_current_location(self):
+        location = dict(
+            userId="1",
+            currentlocation="Kisasi"
+        )
+        response = self.client.patch(
+            'api/v1/parcels/1/currentlocation',
+            headers={'Authorization': self.token},
+            content_type='application/json',
+            data=json.dumps(location)
+        )
+        self.assertEqual(response.status_code, 200)

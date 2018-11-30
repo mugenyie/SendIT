@@ -266,7 +266,7 @@ def change_present_location_of_order(parcelId):
             'error' : 'Current location can not be null'
         }), 400
     try:
-        Parcel({'parcelId': parcelId, 'currentlocation': data.get('currentlocation')}).change_order_status()
+        Parcel({'parcelId': parcelId, 'currentlocation': data.get('currentlocation')}).change_order_currentlocation()
         return jsonify({
             'status': 200,
             'data': [{

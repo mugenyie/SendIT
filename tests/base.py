@@ -38,7 +38,8 @@ class BaseTestCase(unittest.TestCase):
             firstname = self.default_firstname,
             lastname = self.default_lastname,
             othernames = self.default_othernames,
-            password = self.default_password
+            password = self.default_password,
+            isAdmin = True
         )
 
         """

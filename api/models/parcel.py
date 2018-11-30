@@ -81,6 +81,13 @@ class Parcel:
         """.format(self.status, self.parcelId)
         database.cursor.execute(change_status_commnd)   
         return 
+
+    def change_order_currentlocation(self):
+        change_location_commnd = """
+        UPDATE parcels SET "currentlocation" = '{}' WHERE id = {}
+        """.format(self.currentlocation, self.parcelId)
+        database.cursor.execute(change_location_commnd)   
+        return 
     
     def check_order_status(self):
         status_commnd = """
