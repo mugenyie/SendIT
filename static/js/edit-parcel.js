@@ -99,7 +99,7 @@ function changeCurrentLocation(){
 function changeStatus(){
     let status = document.getElementById("status").value;
     document.getElementById("spinner").style.display = 'flex';
-console.log(status);
+
     fetch(`https://sendit-api-columbus.herokuapp.com/api/v1/parcels/${parcelId}/status`, {
         method: 'PATCH',
         headers : {
