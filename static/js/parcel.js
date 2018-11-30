@@ -112,7 +112,7 @@ function get_all_orders(){
     .then(function(data) {
         data.data.forEach(element => {
             edit_link = element.status == "DELIVERED" ? "" : `
-            <a href='user_edit_order.html?order=${element.id}'>Edit Delivery Order</a>`; //if delivered show no edit
+            <a href='admin_edit_order.html?order=${element.id}'>Edit Delivery Order</a>`; //if delivered show no edit
             
             order_list += `
             <tr>

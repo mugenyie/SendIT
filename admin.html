@@ -6,11 +6,10 @@
     <link rel="stylesheet" href="static/css/style.css">
     <script src="static/js/auth.js"></script>
 </head>
-<body onload="isAdmin(); checkToken(); get_all_orders();">
+<body onload="checkToken(); get_all_orders();">
     <div class="top-bar">
-        <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
+        <a class="left" href="admin.html"><img src="static/images/home-icon.png" alt=""> Home</a>
         <a class="right" href="javascript:logOut()"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
-        <a id="order-nav" class="right" href="orderhistory.html"><img src="static/images/box-on-hand.png" alt=""> Order History</a>
         <a class="right"><img src="static/images/user.png"> <span id="username"></span></a>
     </div>
     <div>

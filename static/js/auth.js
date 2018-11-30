@@ -144,7 +144,3 @@ function logOut()
     }
     window.location = "index.html"; 
 }
-
-function isAdmin(){
-    document.getElementById('order-nav').style.display = 'none';
-}

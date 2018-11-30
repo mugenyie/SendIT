@@ -10,9 +10,8 @@
 </head>
 <body onload="checkToken(); initializeMapsAutocomplete();">
     <div class="top-bar">
-        <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
+        <a class="left" href="admin.html"><img src="static/images/home-icon.png" alt=""> Home</a>
         <a class="right" href="javascript:logOut()"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
-        <a class="right" href="orderhistory.html"><img src="static/images/box-on-hand.png" alt=""> Order History</a>
         <a class="right"><img src="static/images/user.png"> <span id="username"></span></a>
     </div>
 <div>
@@ -26,15 +25,24 @@
     <span class="success centered" id="edit-success"></span>
 
     <div id="locationField">
-        <input id="autocomplete" placeholder="Change Order Destination" type="text"></input>
+        <input id="autocomplete" placeholder="Change Order Current Location" type="text"></input>
     </div>
     <div class="goin-btn">
-            <button id="change-destination" class="btn-blue" type='submit'>Save Destination</button>
+        <button id="change-currentLocation" class="btn-blue" type='submit'>Save Current Location</button>
+    </div>
+    <br /><br /><br />
+    <div>
+        <select name="status" id="status">
+            <option value="PLACED">PLACED</option>
+            <option value="TRANSITING">TRANSITING</option>
+            <option value="DELIVERED">DELIVERED</option>
+        </select>
     </div>
     <div class="goin-btn">
-        <button id="cancel-delivery" class="btn-blue">Cancel Delivery Order</button>
+        <button id="change-status" class="btn-blue">Save Order Status</button>
     </div>
-    <input id="change-status" type="hidden">
+    <input id="cancel-delivery" type="hidden">
+    <input id="change-destination" type="hidden">
 
 	<div class="centered" id="spinner">
 		<img src="static/images/spinner.gif" alt="">
