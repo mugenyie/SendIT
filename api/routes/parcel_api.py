@@ -5,7 +5,8 @@ from api.validations.parcel import validate_id, validate_parcel_order_id, check_
 from api.validations.user import validate_userid, validate_if_isadmin
 from api.order_status_enum import OrderStatus
 from api.models.parcel import Parcel
-from api.utils import token_required, encode_auth_token
+from api.models.user import User
+from api.utils import token_required, encode_auth_token, send_email
 
 
 
@@ -209,7 +210,8 @@ Only Admin
 @token_required
 def change_status_parcel_delivery_order(parcelId):
     data = request.get_json(force=True)
-    if validate_if_isadmin(data.get('userId')):
+    userId = data.get('userId')
+    if validate_if_isadmin(userId):
         return jsonify({
             'status': 401,
             'error' : 'Only admin authorised to access the resource'
@@ -226,6 +228,8 @@ def change_status_parcel_delivery_order(parcelId):
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'status': data.get('status')}).change_order_status()
+        to = User({"userId": userId}).fetch_user_email()
+        send_email(to, "SendIT Order Delivery "+data.get('status').upper(), "Your order status changed to "+data.get('status').upper())
         return jsonify({
             'status': 200,
             'data': [{
@@ -250,7 +254,8 @@ Only Admin
 @token_required
 def change_present_location_of_order(parcelId):
     data = request.get_json(force=True)
-    if validate_if_isadmin(data.get('userId')):
+    userId = data.get('userId')
+    if validate_if_isadmin(userId):
         return jsonify({
             'status': 401,
             'error' : 'Only admin authorised to access the resource'
@@ -267,6 +272,8 @@ def change_present_location_of_order(parcelId):
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'currentlocation': data.get('currentlocation')}).change_order_currentlocation()
+        to = User({"userId": userId}).fetch_user_email()
+        send_email(to, "SendIT Order Delivery", "Your order current location is "+data.get('currentlocation'))
         return jsonify({
             'status': 200,
             'data': [{

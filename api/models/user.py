@@ -63,6 +63,14 @@ class User:
         user = database.cursor.fetchone()
         return user
     
+    def fetch_user_email(self):
+        get_user_email_command = """
+        SELECT email FROM users WHERE "id"={}
+        """.format(self.userId)
+        database.cursor.execute(get_user_email_command)
+        email = database.cursor.fetchone()
+        return email[0]
+    
     def check_if_isadmin(self):
         get_user_by_id_command = """
         SELECT * FROM users WHERE id = {} and isadmin = True

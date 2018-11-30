@@ -6,6 +6,7 @@ from functools import wraps
 import hashlib
 import datetime
 from flask import request, jsonify, make_response, Flask
+import smtplib
 
 
 app = Flask(__name__)
@@ -69,3 +70,13 @@ def encode_auth_token(username):
         app.config['SECRET_KEY'],
         algorithm='HS256'
         ).decode('UTF-8')
+
+def send_email(to, subject, message):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login("senditcolumbus@gmail.com", "Sendit123")
+    fromaddr = "senditcolumbus@gmail.com"
+    text = 'Subject: {}\n\n{}'.format(subject, message)
+    server.sendmail(fromaddr, to, text)
