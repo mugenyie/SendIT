@@ -58,3 +58,11 @@ function computeTotalDuration(result) {
     total = total / 60;
     document.getElementById('duration').innerHTML = Math.ceil(total) + ' mins';
 }
+
+function initializeMapsAutocomplete() {
+  let autocomplete = new google.maps.places.Autocomplete(
+      /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
+      { types: ['geocode'] });
+  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+  });
+}

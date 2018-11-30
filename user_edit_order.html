@@ -5,8 +5,10 @@
 	<link rel="icon" type="image/x-icon" href="static/images/sendit-icon.png">
 	<link rel="stylesheet" href="static/css/style.css">
     <script src="static/js/auth.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCI-I8TwqaI7soaw0o5pG2iGHtJCzXVGRM"></script>
+    <script src="static/js/google-maps.js"></script>
 </head>
-<body onload="checkToken()">
+<body onload="checkToken(); initializeMapsAutocomplete();">
     <div class="top-bar">
         <a class="left" href="home.html"><img src="static/images/home-icon.png" alt=""> Home</a>
         <a class="right" href="javascript:logOut()"><img src="static/images/power-button-outline.png" alt=""> Log Out</a>
@@ -23,8 +25,9 @@
     <span class="error centered" id="edit-error"></span>
     <span class="success centered" id="edit-success"></span>
 
-
-    <input id="destination" type="text" placeholder="Change Order Destination">
+    <div id="locationField">
+        <input id="autocomplete" placeholder="Change Order Destination" type="text"></input>
+    </div>
     <div class="goin-btn">
             <button id="change-destination" class="btn-blue" type='submit'>Save Destination</button>
     </div>

@@ -1,7 +1,6 @@
 document.getElementById("cancel-delivery").addEventListener("click", cancelOrder);
 document.getElementById("change-destination").addEventListener("click", changeDestination);
 let parcelId = findGetParameter("order");
-let destination = document.getElementById("destination").value;
 
 function cancelOrder(){
     document.getElementById("spinner").style.display = 'flex';
@@ -31,8 +30,34 @@ function cancelOrder(){
 }
 
 function changeDestination(){
-    
-    console.log(destination);
+    let destination = document.getElementById("autocomplete").value;
+    document.getElementById("spinner").style.display = 'flex';
+
+    fetch(`https://sendit-api-columbus.herokuapp.com/api/v1/parcels/${parcelId}/destination`, {
+        method: 'PATCH',
+        headers : {
+            "Authorization":getCookie("token")
+        },
+        body:JSON.stringify({
+            to:destination
+        })
+    }).then((res) => res.json())
+    .then(
+        function (data){
+            if(data.error != null){
+                document.getElementById("edit-error").textContent=data.error;
+            }else{
+                document.getElementById("edit-success").textContent="Order: "+parcelId+" Delivery Destination Changed to "+destination;
+            }
+            console.log(data)
+            document.getElementById("spinner").style.display = 'none'
+        }
+        )
+    .catch(function(err){
+        console.log(err)
+        document.getElementById("spinner").style.display = 'none'
+        document.getElementById("edit-error").textContent="An error occured, please try again"
+    });
 }
 
 function findGetParameter(parameterName) {
