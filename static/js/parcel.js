@@ -73,13 +73,17 @@ function get_user_orders(){
     }).then((res) => res.json())
     .then(function(data) {
         data.data.forEach(element => {
-            cancel_link = element.status == "DELIVERED" ? "" : "<a href=''>Cancel Delivery</a>"; //if delivered show no cancel
+            // if(Boolean(element.iscanceled) == true){
+            //     edit_link = "Order Canceled";
+            // }
+            edit_link = element.status == "DELIVERED" ? "" : `
+            <a href='user_edit_order.html?order=${element.id}'>Edit Delivery Order</a>`; //if delivered show no edit
             
             order_list += `
             <tr>
                 <td>${element.id}</td><td>${element.senton}</td><td>${element.from}</td>
                 <td>${element.to}</td><td>${element.currentlocation}</td><td>${element.status}</td>
-                <td>${cancel_link}</td>
+                <td>${edit_link}</td>
             </tr>
             `
         });
@@ -107,12 +111,14 @@ function get_all_orders(){
     }).then((res) => res.json())
     .then(function(data) {
         data.data.forEach(element => {
-
+            edit_link = element.status == "DELIVERED" ? "" : `
+            <a href='user_edit_order.html?order=${element.id}'>Edit Delivery Order</a>`; //if delivered show no edit
+            
             order_list += `
             <tr>
                 <td>${element.id}</td><td>${element.senton}</td><td>${element.from}</td>
                 <td>${element.to}</td><td>${element.currentlocation}</td><td>${element.status}</td>
-                <td><a href="#">Edit</a></td>
+                <td>${edit_link}</td>
             </tr>
             `
         });
@@ -124,3 +130,4 @@ function get_all_orders(){
         console.log(error);
     }); 
 }
+
