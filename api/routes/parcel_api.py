@@ -228,7 +228,7 @@ def change_status_parcel_delivery_order(parcelId):
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'status': data.get('status')}).change_order_status()
-        to = User({"userId": userId}).fetch_user_email()
+        to = Parcel({"parcelId": parcelId}).fetch_parcel_user_email()
         send_email(to, "SendIT Order Delivery "+data.get('status').upper(), "Your order status changed to "+data.get('status').upper())
         return jsonify({
             'status': 200,
@@ -272,7 +272,7 @@ def change_present_location_of_order(parcelId):
         }), 400
     try:
         Parcel({'parcelId': parcelId, 'currentlocation': data.get('currentlocation')}).change_order_currentlocation()
-        to = User({"userId": userId}).fetch_user_email()
+        to = Parcel({"parcelId": parcelId}).fetch_parcel_user_email()
         send_email(to, "SendIT Order Delivery", "Your order current location is "+data.get('currentlocation'))
         return jsonify({
             'status': 200,

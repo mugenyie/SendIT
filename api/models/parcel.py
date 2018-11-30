@@ -96,3 +96,11 @@ class Parcel:
         database.cursor.execute(status_commnd)   
         order = database.cursor.fetchone()
         return order[0]
+
+    def fetch_parcel_user_email(self):
+        command = """
+        SELECT email FROM users INNER JOIN parcels ON (users.Id = parcels.placedby  and parcels.id = {})
+        """.format(self.parcelId)
+        database.cursor.execute(command)
+        email = database.cursor.fetchone()
+        return email[0]
