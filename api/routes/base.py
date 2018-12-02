@@ -6,7 +6,10 @@ swagger_json = Blueprint('swagger_json','base_view',static_folder='static',stati
 
 @base_api.route('/')
 def index():
-    return 'SendIT Api'
+    return """
+    SendIT API
+    [API Documentation: https://sendit-api-columbus.herokuapp.com/api/v1/docs/]
+    """
 
 @swagger_json.route('/v1/swagger.json')
 def swagger():

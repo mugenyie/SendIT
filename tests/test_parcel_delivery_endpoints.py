@@ -149,6 +149,18 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_change_order_status_no_header(self):
+        status = dict(
+            userId="1",
+            status="PLACED"
+        )
+        response = self.client.patch(
+            'api/v1/parcels/1/status',
+            content_type='application/json',
+            data=json.dumps(status)
+        )
+        self.assertEqual(response.status_code, 401)
+
 
     def test_change_order_current_location_notadmin(self):
         location = dict(
@@ -188,3 +200,15 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
             data=json.dumps(location)
         )
         self.assertEqual(response.status_code, 200)
+
+    def test_change_order_current_location_no_header(self):
+        location = dict(
+            userId="1",
+            currentlocation="Kisasi"
+        )
+        response = self.client.patch(
+            'api/v1/parcels/1/currentlocation',
+            content_type='application/json',
+            data=json.dumps(location)
+        )
+        self.assertEqual(response.status_code, 401)
