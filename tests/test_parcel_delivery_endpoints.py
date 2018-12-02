@@ -11,7 +11,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         response = self.client.get('api/v1/parcels')
         self.assertEqual(response.status_code, 401)
 
-    def test_get_parcels(self):
+    def test_get_all_parcels(self):
         response = self.client.get('api/v1/parcels', headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 200)
 
@@ -32,6 +32,22 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         )
         self.assertEqual(response.status_code, 201)
 
+    def test_create_order_no_header(self):
+        order = dict(
+                placedby="1",
+                weight="4",
+                weightmetric="Kg",
+                senton= "2018-11-13 02:05:13.344624+03",
+                to="ntinda",
+            )
+        order['from'] ="Nitnda"
+        response = self.client.post(
+            'api/v1/parcels',
+            content_type='application/json',
+            data=json.dumps(order)
+        )
+        self.assertEqual(response.status_code, 401)
+
 
     def test_create_order_with_inexistent_user(self):
         order = dict(
@@ -51,7 +67,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-    def test_invalid_weight(self):
+    def test_create_order_invalid_weight(self):
         order = dict(
             placedby="1",
             weight="jkl",
@@ -69,25 +85,42 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 400)
 
 
-    def test_that_get_all_parcels(self):
-        response = self.client.get('api/v1/parcels',headers={'Authorization': self.token})
+    def test_fetch_specific_delivery_order_by_parcelid(self):
+        response = self.client.get('api/v1/parcels/1',headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 200)
 
+    def test_fetch_specific_delivery_order_by_parcelid_no_header(self):
+        response = self.client.get('api/v1/parcels/1')
+        self.assertEqual(response.status_code, 401)
 
     def test_fetch_specific_delivery_order_invalid_id(self):
         response = self.client.get('api/v1/parcels/2569845',headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 404)
 
+    def test_fetch_orders_by_specific_user(self):
+        response = self.client.get('api/v1/users/1/parcels',headers={'Authorization': self.token})
+        self.assertEqual(response.status_code, 200)
+
+    def test_fetch_orders_by_specific_user_no_header(self):
+        response = self.client.get('api/v1/users/1/parcels')
+        self.assertEqual(response.status_code, 401)
 
     def test_fetch_orders_by_unregistered_user(self):
         response = self.client.get('api/v1/users/84684615/parcels',headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 404)
 
-    
+
+    def test_cancel_delivery_order(self):
+        response = self.client.patch('api/v1/parcels/1/cancel',headers={'Authorization': self.token})
+        self.assertEqual(response.status_code, 200)
+
+    def test_cancel_delivery_order_no_header(self):
+        response = self.client.patch('api/v1/parcels/1/cancel')
+        self.assertEqual(response.status_code, 401)
+
     def test_cancel_unavailable_delivery_order(self):
         response = self.client.patch('api/v1/parcels/0/cancel',headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 404)
-
 
     def test_change_destination_with_invalid_order(self):
         response = self.client.patch('api/v1/parcels/0/destination',headers={'Authorization': self.token})
@@ -120,10 +153,10 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_change_order_status_with_empty(self):
-        response = self.client.patch('api/v1/parcels/4/status',headers={'Authorization': self.token})
+        response = self.client.patch('api/v1/parcels/1/status',headers={'Authorization': self.token})
         self.assertEqual(response.status_code, 400)
 
-    def test_change_order_status_with_user_notadmin(self):
+    def test_change_order_status_with_user_not_admin(self):
         status = dict(
             userId="100",
             status="PLACED"
@@ -162,7 +195,7 @@ class ParcelDeliveryApiTestCase(BaseTestCase):
         self.assertEqual(response.status_code, 401)
 
 
-    def test_change_order_current_location_notadmin(self):
+    def test_change_order_current_location_not_admin(self):
         location = dict(
             userId="100",
             currentlocation="Ntinda"
