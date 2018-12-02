@@ -1,0 +1,6 @@
+.coverage
+venv/
+tests/
+api/
+.vscode/
+.pytest_cache/
